@@ -1,0 +1,20 @@
+<div class="content-width justify-content-center align-items-center px-2">
+  <h1 class="mb-4 fw-bold rounded bg-secondary p-1 text-center shadow-sm">
+    {{ 'HOME.TITLE' | translate }}
+  </h1>
+  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"> 
+    {{ 'HOME.REGISTER_GROCERIES' | translate }} 
+  </button>
+  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"> 
+    {{ 'HOME.GROCERIES_MARKET_HISTORY' | translate }} 
+  </button>
+  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
+  (click)="navigateToPage('exchange-rate')"> 
+    {{ 'HOME.EXCHANGE_RATE' | translate }} 
+  </button>
+
+  <!-- <div class="mt-4">
+    <button class="btn btn-outline-secondary btn-sm" (click)="useLanguage('es')">ES</button>
+    <button class="btn btn-outline-secondary btn-sm ms-2" (click)="useLanguage('en')">EN</button>
+  </div> -->
+</div>
