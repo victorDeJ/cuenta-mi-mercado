@@ -1,9 +1,23 @@
 {
+  "GENERAL":{
+    "DATE":"Fecha"
+  },
   "HOME": {
+    "BREADCRUMB_NAME": "Inicio",
     "TITLE": "Cuenta mi mercado",
-    "REGISTER_MARKET": "Registrar Mercado",
-    "HISTORY": "Histórico de mercados",
+    "REGISTER_GROCERIES": "Registrar Mercado",
+    "GROCERIES_MARKET_HISTORY": "Histórico de mercados",
     "EXCHANGE_RATE": "Tasa de cambio",
     "LANGUAGE": "Idioma"
+  },
+  "EXCHANGE_RATE": {
+    "BREADCRUMB_NAME": "Tasas de cambio",
+    "TITLE": "Tasas de cambio",
+    "BCV_RATE": "Tasa BCV",
+    "KONTIGO_RATE": "Tasa Kontigo",
+    "RATE_DATE": "Fecha de la tasa",
+    "HISTORIAL_RATES": "Historial de tasas",
+    "RATE_ONE": "BCV",
+    "RATE_TWO": "Kontigo"
   }
 }

@@ -1,9 +1,20 @@
 {
   "HOME": {
+    "BREADCRUMB_NAME": "Home",
     "TITLE": "Cuenta mi mercado",
-    "REGISTER_MARKET": "Register Market",
-    "HISTORY": "Market History",
+    "REGISTER_GROCERIES": "Register Market",
+    "GROCERIES_MARKET_HISTORY": "Market History",
     "EXCHANGE_RATE": "Exchange Rate",
     "LANGUAGE": "Language"
+  },
+  "EXCHANGE_RATE": {
+    "BREADCRUMB_NAME": "Exchange Rate",
+    "TITLE": "Exchange Rate",
+    "BCV_RATE": "BCV rate",
+    "KONTIGO_RATE": "Kontigo rate",
+    "RATE_DATE": "Rate date",
+    "HISTORIAL_RATES": "Historial rates",
+    "RATE_ONE": "BCV",
+    "RATE_TWO": "Kontigo"
   }
 }

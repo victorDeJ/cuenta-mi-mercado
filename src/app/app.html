@@ -1,1 +1,15 @@
-<router-outlet />
+@if(layout.headerTitle()){
+  <div class="d-flex justify-content-center align-items-center vh-10 bg-secondary position-relative shadow-sm border border-primary">
+    @if(layout.getPreviousBreadcrumb()?.id){
+      <button class="btn btn-primary fw-semibold position-absolute start-0 my-0 mx-2 shadow-sm" 
+      (click)="navigateToPage(layout.getPreviousBreadcrumb()?.url ?? '')"
+      > 
+        <i class="bi bi-caret-left-fill"></i>
+      </button>
+    }
+    <h1>{{ layout.headerTitle() | translate }}</h1>
+  </div>
+}
+<div class="d-flex justify-content-center align-items-center vh-90">
+  <router-outlet (deactivate)="onDeactivate()" />
+</div>
