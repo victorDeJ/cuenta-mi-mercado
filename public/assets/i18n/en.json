@@ -1,4 +1,12 @@
 {
+  "GENERAL":{
+    "DATE":"Date",
+    "NAME":"Name",
+    "WEIGHT":"Weight",
+    "WEIGHT_BY_KG":"Weight x KG",
+    "PRICE":"Price",
+    "TOTAL":"Total"
+  },
   "HOME": {
     "BREADCRUMB_NAME": "Home",
     "TITLE": "Cuenta mi mercado",
@@ -16,5 +24,17 @@
     "HISTORIAL_RATES": "Historial rates",
     "RATE_ONE": "BCV",
     "RATE_TWO": "Kontigo"
+  },
+  "GROCERIES_LIST":{
+    "BREADCRUMB_NAME": "Groceries List",
+    "TITLE": "Groceries List",
+    "GROCERIES_LIST_DATE":"Groceries list date",
+    "DESCRIPTION":"Description",
+    "ITEMS":"Items",
+    "TOTAL_IN_DOLLARS":"Total in dollars",
+    "BCV_RATE":"BCV rate",
+    "BS_TOTAL_BCV":"Total in Bs (BCV)",
+    "KONTIGO_RATE":"Kontigo rate",
+    "DOLLARS_TOTAL_KONTIGO":"Total in $ (Kontigo)" 
   }
 }

@@ -1,6 +1,11 @@
 {
   "GENERAL":{
-    "DATE":"Fecha"
+    "DATE":"Fecha",
+    "NAME":"Nombre",
+    "WEIGHT":"Peso",
+    "WEIGHT_BY_KG":"PRecio x KG",
+    "PRICE":"Precio",
+    "TOTAL":"Total"
   },
   "HOME": {
     "BREADCRUMB_NAME": "Inicio",
@@ -19,5 +24,17 @@
     "HISTORIAL_RATES": "Historial de tasas",
     "RATE_ONE": "BCV",
     "RATE_TWO": "Kontigo"
+  },
+  "GROCERIES_LIST": {
+    "BREADCRUMB_NAME": "Lista de mercados",
+    "TITLE": "Lista de mercados",
+    "GROCERIES_LIST_DATE":"Fecha del mercado",
+    "DESCRIPTION":"Descripción",
+    "ITEMS":"Productos",
+    "TOTAL_IN_DOLLARS":"Total en dolares",
+    "BCV_RATE":"Tasa BCV",
+    "BS_TOTAL_BCV":"Total en Bs (BCV)",
+    "KONTIGO_RATE":"Tasa Kontigo",
+    "DOLLARS_TOTAL_KONTIGO":"Total en $ (Kontigo)"
   }
 }
