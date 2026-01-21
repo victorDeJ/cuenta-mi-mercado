@@ -1,0 +1,21 @@
+.content-width {
+  min-width: min(100vw, 600px);
+  max-width: max(100vw, 600px);
+}
+
+button{
+  box-shadow: var(--bs-box-shadow-sm) !important;
+}
+
+@for $i from 1 through 9 {
+  $size: $i * 10;
+  .h-#{$size} {
+    height: #{$size}+'%' !important;
+  }
+  .vh-#{$size} {
+    height: #{$size}vh !important;
+  }
+  .min-vh-#{$size} {
+    min-height: #{$size}vh !important;
+  }
+}
