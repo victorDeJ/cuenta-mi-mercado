@@ -16,6 +16,7 @@ export class ExchangeRatePage {
   exchangeRateDate: Temporal.ZonedDateTime = Temporal.Now.zonedDateTimeISO('UTC');
 
   ngOnInit(): void {
+    this.layout.cleanBreadcrumb();
     this.layout.setHeaderTitle('EXCHANGE_RATE.TITLE');
     const breadcrumbItem: IBreadcrumb = {
       id: "ExchangeRate",
