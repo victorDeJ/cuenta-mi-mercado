@@ -5,6 +5,9 @@ import { IBreadcrumb } from './interfaces/breadcrumb.interface';
   providedIn: 'root',
 })
 export class Layout {
+  constructor() {
+    console.log('Layout constructor');
+  }
   headerTitle: WritableSignal<string> = signal('')
   private initBreadcrumb: IBreadcrumb = {
     id: 'home',
@@ -12,10 +15,26 @@ export class Layout {
     url: '/',
   };
   breadcrumb: WritableSignal<IBreadcrumb[]> = signal([ {...this.initBreadcrumb}]);
-
+  isLoading: WritableSignal<boolean> = signal(false);
+  private loadingCounter: WritableSignal<number> = signal(0);
 
   setHeaderTitle(headerTitle: string): void {
     this.headerTitle.set(headerTitle);
+  }
+
+  setToLoading(): void {
+    this.loadingCounter.update((prev) => prev + 1);
+    if( this.loadingCounter() > 0){
+      this.isLoading.set(true);
+    }
+  }
+
+  setToUnloading(): void {
+    this.loadingCounter.update((prev) => prev - 1);
+    if( this.loadingCounter() <= 0){
+      this.isLoading.set(false);
+      this.loadingCounter.set(0)
+    }
   }
 
   cleanBreadcrumb() {
@@ -54,6 +73,8 @@ export class Layout {
   clearLayout(): void {
     this.headerTitle.set('');
     this.breadcrumb.set([{ ...this.initBreadcrumb }]);
+    this.isLoading.set(false);
+    this.loadingCounter.set(0);
   }
 
   getPreviousBreadcrumb(): IBreadcrumb | undefined {
