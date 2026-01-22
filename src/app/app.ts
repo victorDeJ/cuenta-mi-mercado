@@ -1,7 +1,8 @@
 import { Component, signal, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { Layout } from './core/services/layout';
+import { Layout } from './core/services/layout/layout';
+import { Database } from './core/services/database/database';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { Layout } from './core/services/layout';
 export class App {
   router = inject(Router);
   layout = inject(Layout);
+  database = inject(Database);
 
   private readonly translate = inject(TranslateService);
   protected readonly title = signal('cuenta-mi-mercado');

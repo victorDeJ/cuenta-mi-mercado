@@ -5,25 +5,39 @@
     "WEIGHT":"Weight",
     "WEIGHT_BY_KG":"Weight x KG",
     "PRICE":"Price",
-    "TOTAL":"Total"
+    "BASE_PRICE":"Base price",
+    "DESCRIPTION":"Descripción",
+    "TOTAL":"Total",
+    "PRODUCT":"Product",
+    "ACCEPT":"Accept",
+    "REJECT":"Reject",
+    "CANCEL":"Cancel",
+    "ADD":"Add",
+    "QUANTITY":"Quantity",
+    "LOADING":"Loading",
+    "AMOUNT":"AMOUNT"
   },
   "HOME": {
     "BREADCRUMB_NAME": "Home",
-    "TITLE": "Cuenta mi mercado",
+    "TITLE": "🛒Count my groceries🛒",
     "REGISTER_GROCERIES": "Register Market",
-    "GROCERIES_MARKET_HISTORY": "Market History",
+    "GROCERIES_LIST_HISTORY": "Market History",
     "EXCHANGE_RATE": "Exchange Rate",
     "LANGUAGE": "Language"
   },
   "EXCHANGE_RATE": {
     "BREADCRUMB_NAME": "Exchange Rate",
     "TITLE": "Exchange Rate",
+    "RATE": "Rate",
     "BCV_RATE": "BCV rate",
     "KONTIGO_RATE": "Kontigo rate",
     "RATE_DATE": "Rate date",
     "HISTORIAL_RATES": "Historial rates",
     "RATE_ONE": "BCV",
-    "RATE_TWO": "Kontigo"
+    "RATE_TWO": "Kontigo",
+    "RATE_TYPE": "Rate",
+    "ADD_RATE":"Agregar tasa",
+    "EDIT_RATE":"Editar tasa"
   },
   "GROCERIES_LIST":{
     "BREADCRUMB_NAME": "Groceries List",
@@ -31,10 +45,17 @@
     "GROCERIES_LIST_DATE":"Groceries list date",
     "DESCRIPTION":"Description",
     "ITEMS":"Items",
-    "TOTAL_IN_DOLLARS":"Total in dollars",
+    "SUBTOTAL_DOLLARS":"Subtotal $",
+    "TOTAL_IVA":"Total IVA",
+    "TOTAL_IN_DOLLARS":"Total #",
     "BCV_RATE":"BCV rate",
-    "BS_TOTAL_BCV":"Total in Bs (BCV)",
+    "BS_TOTAL_BCV":"Total Bs(BCV) to pay",
     "KONTIGO_RATE":"Kontigo rate",
-    "DOLLARS_TOTAL_KONTIGO":"Total in $ (Kontigo)" 
+    "DOLLARS_TOTAL_KONTIGO":"Total $ (Kontigo) to pay" 
+  },
+  "GROCERIES_LIST_HISTORY":{
+    "BREADCRUMB_NAME": "Groceries List History",
+    "TITLE": "Groceries List History",
+    "CONFIRM_DELETE_ITEM": "Are you sure you want to delete this item?"
   }
 }

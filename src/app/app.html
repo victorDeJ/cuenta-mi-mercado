@@ -1,7 +1,9 @@
 @if(layout.headerTitle()){
-  <div class="d-flex justify-content-center align-items-center vh-10 bg-secondary position-relative shadow-sm border border-primary">
+  <div class="d-flex justify-content-center align-items-center vh-10 bg-primary-subtle position-relative shadow-sm border border-primary"
+  style="z-index: 1051;"
+  >
     @if(layout.getPreviousBreadcrumb()?.id){
-      <button class="btn btn-primary fw-semibold position-absolute start-0 my-0 mx-2 shadow-sm" 
+      <button class="btn btn-info  text-white fw-semibold position-absolute start-0 my-0 mx-2 shadow-sm" 
       (click)="navigateToPage(layout.getPreviousBreadcrumb()?.url ?? '')"
       > 
         <i class="bi bi-caret-left-fill"></i>
@@ -13,3 +15,14 @@
 <div class="d-flex justify-content-center align-items-center vh-90">
   <router-outlet (deactivate)="onDeactivate()" />
 </div>
+
+@if (layout.isLoading()) {
+  <div class="position-fixed top-0 start-0  w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50" style="z-index: 1050;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">
+        {{ 'GENERAL.LOADING' | translate}}
+      </span>
+    </div>
+  </div>
+}
+

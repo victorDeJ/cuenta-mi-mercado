@@ -5,25 +5,39 @@
     "WEIGHT":"Peso",
     "WEIGHT_BY_KG":"PRecio x KG",
     "PRICE":"Precio",
-    "TOTAL":"Total"
+    "BASE_PRICE":"Precio base",
+    "DESCRIPTION":"Descripción",
+    "TOTAL":"Total",
+    "PRODUCT":"Producto",
+    "ACCEPT":"Aceptar",
+    "REJECT":"Rechazar",
+    "CANCEL":"Cancelar",
+    "ADD":"Agregar",
+    "QUANTITY":"Cantidad",
+    "LOADING":"Cargando",
+    "AMOUNT":"Monto"
   },
   "HOME": {
     "BREADCRUMB_NAME": "Inicio",
-    "TITLE": "Cuenta mi mercado",
+    "TITLE": "🛒Cuenta mi mercado🛒",
     "REGISTER_GROCERIES": "Registrar Mercado",
-    "GROCERIES_MARKET_HISTORY": "Histórico de mercados",
+    "GROCERIES_LIST_HISTORY": "Histórico de mercados",
     "EXCHANGE_RATE": "Tasa de cambio",
     "LANGUAGE": "Idioma"
   },
   "EXCHANGE_RATE": {
     "BREADCRUMB_NAME": "Tasas de cambio",
     "TITLE": "Tasas de cambio",
+    "RATE": "Tasa",
     "BCV_RATE": "Tasa BCV",
     "KONTIGO_RATE": "Tasa Kontigo",
     "RATE_DATE": "Fecha de la tasa",
     "HISTORIAL_RATES": "Historial de tasas",
     "RATE_ONE": "BCV",
-    "RATE_TWO": "Kontigo"
+    "RATE_TWO": "Kontigo",
+    "RATE_TYPE":"Tipo",
+    "ADD_RATE":"Agregar tasa",
+    "EDIT_RATE":"Editar tasa"
   },
   "GROCERIES_LIST": {
     "BREADCRUMB_NAME": "Lista de mercados",
@@ -31,10 +45,18 @@
     "GROCERIES_LIST_DATE":"Fecha del mercado",
     "DESCRIPTION":"Descripción",
     "ITEMS":"Productos",
-    "TOTAL_IN_DOLLARS":"Total en dolares",
+    "SUBTOTAL_DOLLARS":"Subtotal $",
+    "TOTAL_IVA":"Total IVA",
+    "TOTAL_IN_DOLLARS":"Total $",
     "BCV_RATE":"Tasa BCV",
-    "BS_TOTAL_BCV":"Total en Bs (BCV)",
+    "BS_TOTAL_BCV":"Total Bs(BCV) a pagar",
     "KONTIGO_RATE":"Tasa Kontigo",
-    "DOLLARS_TOTAL_KONTIGO":"Total en $ (Kontigo)"
+    "DOLLARS_TOTAL_KONTIGO":"Total $ (Kontigo) a pagar"
+  },
+  "GROCERIES_LIST_HISTORY":{
+    "BREADCRUMB_NAME": "Histórico",
+    "TITLE": "Histórico",
+    "DELETE_ITEM": "Eliminar producto",
+    "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?"
   }
 }
