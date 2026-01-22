@@ -1,0 +1,287 @@
+<div class="w-100 vh-90 content-width justify-content-center align-items-top p-2">
+  <div class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
+    <div class="d-flex flex-row w-100">
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.GROCERIES_LIST_DATE' | translate }}
+      </div>
+      <div class="col-6 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
+    <div class="col-6 d-flex flex-column pe-1">
+      <div class="text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.BCV_RATE' | translate }}
+      </div>
+      <div class="d-flex flex-row">
+        <input type="number" 
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+        disabled
+        />
+      </div>
+    </div>
+    <div class="col-6 d-flex flex-column ps-1">
+      <div class="text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.KONTIGO_RATE' | translate }}
+      </div>
+      <div class="d-flex flex-row">
+        <input type="number" 
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+        disabled
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class=" d-flex flex-row align-items-center w-100 mt-3">
+    <h2 class="text-primary fw-semibold me-auto mb-0">{{ 'GROCERIES_LIST.ITEMS' | translate }}</h2>
+    <button class="btn btn-info bi bi-camera-fill text-white shadow-sm"></button>
+    <button class="btn btn-info bi bi-plus-circle-fill text-white shadow-sm ms-2"
+    (click)="showItemContent(-1); $event.stopPropagation()"
+    ></button>
+  </div>
+  
+  <div id="ItemsList" 
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
+    <div class="d-flex flex-row w-100 px-2 pb-1">
+      <div class="col-6 text-primary fw-bold px-2">
+        {{ 'GENERAL.NAME' | translate }}
+      </div>
+      <div class="col-3 text-primary text-start fw-bold px-2">
+        {{ 'GENERAL.WEIGHT' | translate }}
+      </div>
+      <div class="col-2 text-primary text-end fw-bold px-2">
+        {{ 'GENERAL.PRICE' | translate }}
+      </div>
+    </div>
+    <div class="d-flex flex-column overflow-y-auto max-item-height border border-primary rounded p-2">
+      @for( register of [0,1,2,3,4,5]; track $index){
+        <button class="d-flex flex-row bg-primary-subtle border border-primary rounded p-2  shadow-sm text-primary fw-semibold bg-secondary-subtle
+        position-relative item-btn"
+        [ngClass]="{
+          'mt-2': $index !== 0,
+        }"
+        (click)="showItemContent($index); $event.stopPropagation()"
+        >
+          <span class="col-6 text-truncate pe-2"> 
+            Lorem Ipsun dolor d
+          </span>
+          <span class="col-3 text-start px-2"> 
+            1,250Kg
+          </span>
+          <span class="col-2 text-end ps-1"> 
+            5$ 
+          </span>
+          <button class="d-flex justify-content-center align-items-center col-1 btn btn-danger btn-sm border-danger position-absolute top-0 end-0 mt-1 me-1" 
+          (click)="showConfirmDeleteItem($index); $event.stopPropagation()">
+            <i class="bi bi-x-circle-fill text-white"></i>
+          </button>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.SUBTOTAL_DOLLARS' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.TOTAL_IVA' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100 border-bottom border-primary border-2">
+      <div class="col-8 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.TOTAL_IN_DOLLARS' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.BCV_RATE' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100 border-bottom border-primary border-2">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.BS_TOTAL_BCV' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.KONTIGO_RATE' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.DOLLARS_TOTAL_KONTIGO' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        {{ exchangeRateDate.toPlainDate().toString() }}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #itemContent>
+  <div id="itemContentContainer" 
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
+    <div class="text-center text-primary fw-bold w-100 position-relative">
+      <h3>
+        {{ 'GENERAL.PRODUCT' | translate }}
+      </h3>
+      <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+      (click)="closeDialog()"></button>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold ">
+        {{ 'GENERAL.NAME' | translate }}
+      </div>
+      <input type="number" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      />
+    </div>
+  
+    <div>
+      <div class="col-6 text-primary fw-bold ">
+        {{ 'GENERAL.BASE_PRICE' | translate }}
+      </div>
+      <input type="number" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      />
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold ">
+        {{ 'GENERAL.QUANTITY' | translate }}
+      </div>
+      <input type="number" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      value="1"
+      />
+    </div>
+    @if(!showWeightOptions){
+      <button class="btn btn-info shadow-sm text-white fw-bold mt-2 me-2"
+      (click)="showWeightOptions = true"
+      >
+        {{ 'GENERAL.WEIGHT'| translate }}
+        <i class="bi bi-plus-circle-fill"></i>
+      </button>
+    }
+    @if(showWeightOptions){
+      <button class="btn btn-danger shadow-sm text-white fw-bold mt-2"
+      (click)="showWeightOptions = false"
+      >
+        {{ 'GENERAL.WEIGHT'| translate }}
+        <i class="bi bi-x-circle-fill"></i>
+      </button>
+      <div>
+        <div class="col-6 text-primary fw-bold ">
+          {{ 'GENERAL.WEIGHT' | translate }}
+        </div>
+        <div class="d-flex flex-row "> 
+          <input type="number" 
+          class="form-control border border-primary bg-secondary-subtle shadow-sm me-2 text-primary" 
+          />
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input id="radioGr" type="radio" 
+            class="btn-check text-primary"
+             name="btnradio" 
+            autocomplete="off" 
+            checked
+            />
+            <label class="btn btn-outline-primary" for="radioGr">Gr</label>
+  
+            <input id="radioKg" type="radio" 
+            class="btn-check text-primary" 
+            name="btnradio" 
+            autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="radioKg">Kg</label>
+          </div>
+        </div>
+      </div>
+  
+    }
+
+    <div>
+      <div class="col-6 text-primary fw-bold ">
+        {{ 'GENERAL.TOTAL' | translate }}
+      </div>
+      <input type="number" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      />
+    </div>
+
+
+    <div class="d-flex flex-row mt-2">
+      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50">
+        <i class="bi bi-check-circle-fill"></i>
+        {{ 'GENERAL.ACCEPT'| translate }}
+      </button>
+      <button class="btn btn-danger shadow-sm text-white fw-bold mt-2 w-50" (click)="closeDialog()">
+        <i class="bi bi-x-circle-fill"></i>
+        {{ 'GENERAL.CANCEL'| translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #confirmDeleteItem>
+  <div id="ConfirmDeleteItemContainer" 
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
+    
+    <div class="text-center text-primary fw-bold w-100 position-relative"
+    >
+      <h3>
+        {{ 'GROCERIES_LIST_HISTORY.DELETE_ITEM' | translate }}
+      </h3>
+      
+      <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+      (click)="closeConfirmDeleteItem()"
+      ></button>
+    </div>
+
+    <div>
+      <div class="text-primary text-center fw-semibold ">
+        {{ 'GROCERIES_LIST_HISTORY.CONFIRM_DELETE_ITEM' | translate }}
+      </div>
+    </div>
+  
+
+
+    <div class="d-flex flex-row mt-2">
+      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50">
+        <i class="bi bi-check-circle-fill"></i>
+        {{ 'GENERAL.ACCEPT'| translate }}
+      </button>
+      <button class="btn btn-danger shadow-sm text-white fw-bold mt-2 w-50" (click)="closeDialog()">
+        <i class="bi bi-x-circle-fill"></i>
+        {{ 'GENERAL.CANCEL'| translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

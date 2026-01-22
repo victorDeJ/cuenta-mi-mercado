@@ -1,11 +1,11 @@
-<div class="w-100 vh-90 content-width justify-content-center align-items-top p-2">
+<div class="w-100 vh-90 content-width d-flex flex-column p-2">
   <div class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
     <div class="d-flex flex-row w-100">
-      <div class="col-6 text-primary fw-bold">
+      <div class="col-6 text-primary fw-bold ">
         {{ 'EXCHANGE_RATE.RATE_DATE' | translate }}
       </div>
-      <div class="col-6 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+      <div class="col-6 text-end text-primary fw-semibold pe-1">
+        {{ exchangeRateDate.toPlainDate().toString() | date : 'dd/MM/yyyy' }}
       </div>
     </div>
   </div>
@@ -14,11 +14,24 @@
     <div class="col-6 text-primary fw-bold">
       {{ 'EXCHANGE_RATE.BCV_RATE' | translate }}
     </div>
-    <div class="d-flex flex-row">
-      <input type="number" 
-      class="form-control border border-primary bg-secondary-subtle me-2 shadow-sm" 
+    <div class="d-flex flex-row align-items-center">
+      <input type="text" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary fw-semibold" 
+      [value]="BCVExchangeRates()[0]?.amount | number:'1.2-2'"
+      disabled
       />
-      <button class="btn btn-info bi bi-pen-fill text-white shadow-sm"></button>
+      <span class="text-primary fw-semibold ps-2 pe-4">
+        Bs
+      </span>
+      <button class="btn btn-info bi bi-pen-fill text-white shadow-sm me-2"
+      [disabled]="BCVExchangeRates().length === 0"
+      (click)="openDialog(BCVExchangeRates()[0])"
+      >
+      </button>
+      <button class="btn btn-info bi bi-plus-circle-fill text-white shadow-sm"
+      (click)="openDialog(ExchangeRateType.BCV)"
+      >
+      </button>
     </div>
   </div>
 
@@ -26,11 +39,24 @@
     <div class="col-6 text-primary fw-bold">
       {{ 'EXCHANGE_RATE.KONTIGO_RATE' | translate }}
     </div>
-    <div class="d-flex flex-row">
-      <input type="number" 
-      class="form-control border border-primary bg-secondary-subtle me-2 shadow-sm" 
+    <div class="d-flex flex-row align-items-center ">
+      <input type="text" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary fw-semibold" 
+      [value]="KontigoExchangeRates()[0]?.amount | number:'1.2-2'"
+      disabled
       />
-      <button class="btn btn-info bi bi-pen-fill text-white shadow-sm"></button>
+      <span class="text-primary fw-semibold ps-2 pe-4">
+        Bs
+      </span>
+      <button class="btn btn-info bi bi-pen-fill text-white shadow-sm me-2"
+      [disabled]="BCVExchangeRates().length === 0"
+      (click)="openDialog(KontigoExchangeRates()[0])"
+      >
+      </button>
+      <button class="btn btn-info bi bi-plus-circle-fill text-white shadow-sm"
+      (click)="openDialog(ExchangeRateType.KONTIGO)"
+      >
+      </button>
     </div>
   </div>
 
@@ -39,28 +65,128 @@
   </h2>
 
   <div id="historialRates" 
-  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden"
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden d-flex flex-column"
   >
-    <div class="d-flex flex-row w-100 px-2 pb-1">
-      <div class="col-4 text-primary fw-bold">
+    <div class="d-flex flex-row w-100 px-2 pb-1 flex-shrink-0">
+      <div class="col-5 text-primary fw-bold px-2">
         {{ 'GENERAL.DATE' | translate }}
       </div>
-      <div class="col-4 text-primary fw-bold">
-        {{ 'EXCHANGE_RATE.RATE_ONE' | translate }}
+      <div class="col-3 text-primary fw-bold px-2">
+        {{ 'EXCHANGE_RATE.RATE_TYPE' | translate }}
       </div>
-      <div class="col-4 text-primary fw-bold">
-        {{ 'EXCHANGE_RATE.RATE_TWO' | translate }}
+      <div class="col-4 text-primary text-end fw-bold px-2">
+        {{ 'GENERAL.AMOUNT' | translate }}
       </div>
     </div>
-    <div class="d-flex flex-column h-100 overflow-y-auto mb-2">
-      @for( register of [0,1,2,3,4,5,6,7,8,9]; track $index){
-        <div class="d-flex flex-row bg-primary-subtle border border-primary rounded p-2 mb-2 shadow-sm text-primary fw-semibold bg-secondary-subtle">
-          <span class="col-4"> 03/01/2026</span>
-          <span class="col-4"> 300Bs </span>
-          <span class="col-4"> 700Bs </span>
+    <div class="d-flex flex-column overflow-y-auto border border-primary rounded h-100 p-2">
+      @for( register of exchangeRates(); track $index){
+        <div class="d-flex flex-row bg-primary-subtle border border-primary rounded p-2 shadow-sm text-primary fw-semibold bg-secondary-subtle"
+        [ngClass]="{
+          'mt-2': $index !== 0,
+        }"
+        >
+          <span class="col-5 pe-2"> 
+            {{ register.createdAt | date : 'dd/MM/yy HH:mm' }}
+          </span>
+          <span class="col-3 px-2"> 
+            {{ 
+              register.rateType === ExchangeRateType.BCV 
+                ? ('EXCHANGE_RATE.RATE_ONE' | translate) 
+                : ('EXCHANGE_RATE.RATE_TWO' | translate) 
+            }} 
+          </span>
+          <span class="col-4 text-end ps-2"> 
+            {{ register.amount | number:'1.2-2' }} Bs 
+          </span>
         </div>
       }
     </div>
   </div>
 
 </div>
+
+<ng-template #exchangeRateModal>
+  <div id="ExchangeRateContainer" 
+  class="border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden"
+  >
+    <div class="text-center text-primary fw-bold w-100 position-relative">
+      <h3>
+        {{ exchangeRateModel().id 
+          ? ('EXCHANGE_RATE.EDIT_RATE' | translate) 
+          : ('EXCHANGE_RATE.ADD_RATE' | translate) 
+        }}
+      </h3>
+      <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+      (click)="closeDialog()"
+      ></button>
+    </div>
+    
+    <div class="d-flex flex-row">
+      <div class="col-5">
+        <div class="text-primary fw-bold">
+          {{ 'EXCHANGE_RATE.RATE_TYPE' | translate }}
+        </div>
+        <div class="btn-group w-100 shadow-sm" role="group">
+          <input type="radio" class="btn-check" name="rateType" id="rateOne" autocomplete="off" 
+          [checked]="exchangeRateModel().rateType === ExchangeRateType.BCV" 
+          disabled
+          >
+          <label class="btn btn-outline-primary" for="rateOne">
+            {{ 'EXCHANGE_RATE.RATE_ONE' | translate }}
+          </label>
+
+          <input type="radio" class="btn-check" name="rateType" id="rateTwo" autocomplete="off" 
+          [checked]="exchangeRateModel().rateType !== ExchangeRateType.BCV" 
+          disabled
+          >
+          <label class="btn btn-outline-primary" for="rateTwo">
+            {{ 'EXCHANGE_RATE.RATE_TWO' | translate }}
+          </label>
+        </div>
+      </div>
+      
+      <div class="col-7 ps-2">
+        <div class="text-primary fw-bold">
+          {{ 'GENERAL.AMOUNT' | translate }}
+        </div>
+        <div class="d-flex flex-row align-items-center">
+          <input type="number" 
+          class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+          [value]="exchangeRateModel().amount"
+          (input)="onAmountChange($event)" 
+          />
+          <span class="text-primary fw-semibold px-2">
+            Bs
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-primary fw-bold">
+        {{ 'GENERAL.DATE' | translate }}
+      </div>
+      <input type="text" name="trip-start"
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary"
+      [value]="(exchangeRateModel().createdAt | date : 'yyyy-MM-dd HH:mm')"
+      readonly 
+      />
+    </div>
+
+    <div class="d-flex flex-row mt-2">
+      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50"
+      (click)="onSubmit()"
+      [disabled]="exchangeRateModel().amount <= 0"
+      >
+        <i class="bi bi-check-circle-fill"></i>
+        {{ 'GENERAL.ACCEPT' | translate }}
+      </button>
+      <button class="btn btn-danger shadow-sm text-white fw-bold mt-2 w-50" 
+      (click)="closeDialog()"
+      >
+        <i class="bi bi-x-circle-fill"></i>
+        {{ 'GENERAL.CANCEL' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

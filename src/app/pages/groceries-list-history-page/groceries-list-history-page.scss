@@ -1,0 +1,8 @@
+.item-btn{
+  &:hover:not(:disabled,.disabled){
+    cursor: pointer;
+  }
+  &:active:not(:disabled,.disabled){
+    filter: brightness(0.9);
+  }
+}

@@ -1,0 +1,12 @@
+.max-item-height{
+  max-height: 250px;
+}
+
+.item-btn{
+  &:hover:not(:disabled,.disabled){
+    cursor: pointer;
+  }
+  &:active:not(:disabled,.disabled){
+    filter: brightness(0.9);
+  }
+}

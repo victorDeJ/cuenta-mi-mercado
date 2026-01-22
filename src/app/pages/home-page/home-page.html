@@ -1,21 +1,36 @@
 <div class="content-width justify-content-center align-items-center px-2">
-  <h1 class="mb-4 fw-bold rounded bg-secondary p-1 text-center shadow-sm">
+  <h1 class="mb-4 fw-bold rounded bg-primary-subtle pb-2 pt-1 text-center shadow-sm border border-primary text-primary">
     {{ 'HOME.TITLE' | translate }}
   </h1>
+
+  <div class="d-flex justify-content-end align-items-center ">
+    <div class="text-primary fw-bold pe-2 ">
+      {{ 'HOME.LANGUAGE' | translate }}
+    </div>
+    <div class="btn-group" role="group">
+      <input type="radio" class="btn-check" name="language" id="lang-es" autocomplete="off" (click)="useLanguage('es')" checked>
+      <label class="btn btn-outline-primary" for="lang-es">ES</label>
+  
+      <input type="radio" class="btn-check" name="language" id="lang-en" autocomplete="off" (click)="useLanguage('en')">
+      <label class="btn btn-outline-primary" for="lang-en">EN</label>
+    </div>
+  </div>
+
   <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
-  (click)="navigateToPage('groceries-list')"> 
+  (click)="navigateToPage('groceries-list')"
+  > 
     {{ 'HOME.REGISTER_GROCERIES' | translate }} 
   </button>
-  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"> 
-    {{ 'HOME.GROCERIES_MARKET_HISTORY' | translate }} 
+
+  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
+  (click)="navigateToPage('groceries-list-history')"
+  >
+    {{ 'HOME.GROCERIES_LIST_HISTORY' | translate }} 
   </button>
   <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
-  (click)="navigateToPage('exchange-rate')"> 
+  (click)="navigateToPage('exchange-rate')"
+  > 
     {{ 'HOME.EXCHANGE_RATE' | translate }} 
   </button>
 
-  <!-- <div class="mt-4">
-    <button class="btn btn-outline-secondary btn-sm" (click)="useLanguage('es')">ES</button>
-    <button class="btn btn-outline-secondary btn-sm ms-2" (click)="useLanguage('en')">EN</button>
-  </div> -->
 </div>
