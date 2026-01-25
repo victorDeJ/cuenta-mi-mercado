@@ -79,18 +79,28 @@ export class Database {
     const db = await this.getDb();
     const collection = db.collections[collectionName];
 
-    if (!idOrQuery) {
-      const docs = await collection.find().exec();
+    if (!collection) {
+      console.error(`🚩 Collection ${collectionName} not found in database`);
+      return Array.isArray(idOrQuery) || (idOrQuery && typeof idOrQuery === 'object') ? [] : null;
+    }
+
+    try {
+      if (!idOrQuery) {
+        const docs = await collection.find().exec();
+        return docs.map((doc) => doc.toJSON());
+      }
+
+      if (typeof idOrQuery === 'string') {
+        const doc = await collection.findOne(idOrQuery).exec();
+        return doc ? doc.toJSON() : null;
+      }
+
+      const docs = await collection.find(idOrQuery).exec();
       return docs.map((doc) => doc.toJSON());
+    } catch (error) {
+      console.error(`🚩 Error fetching data from ${collectionName}:`, error);
+      return [];
     }
-
-    if (typeof idOrQuery === 'string') {
-      const doc = await collection.findOne(idOrQuery).exec();
-      return doc ? doc.toJSON() : null;
-    }
-
-    const docs = await collection.find(idOrQuery).exec();
-    return docs.map((doc) => doc.toJSON());
   }
 
   async insertData(collectionName: string, data: any) {
@@ -110,7 +120,10 @@ export class Database {
     const db = await this.getDb();
     const collection = db.collections[collectionName];
     const doc = await collection.findOne(id).exec();
-    return await doc.remove();
+    if (doc) {
+      return await doc.remove();
+    }
+    return null;
   }
 
 }

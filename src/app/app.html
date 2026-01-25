@@ -1,5 +1,5 @@
 @if(layout.headerTitle()){
-  <div class="d-flex justify-content-center align-items-center vh-10 bg-primary-subtle position-relative shadow-sm border border-primary"
+  <div class="d-flex justify-content-center align-items-center vh-10 bg-primary-subtle sticky-top shadow-sm border border-primary"
   style="z-index: 1051;"
   >
     @if(layout.getPreviousBreadcrumb()?.id){
@@ -12,7 +12,7 @@
     <h1 class="m-0 text-primary fw-bold ">{{ layout.headerTitle() | translate }}</h1>
   </div>
 }
-<div class="d-flex justify-content-center align-items-center vh-90">
+<div class="d-flex justify-content-center align-items-start min-vh-90">
   <router-outlet (deactivate)="onDeactivate()" />
 </div>
 

@@ -3,6 +3,7 @@ import { RxJsonSchema } from "rxdb";
 export interface GroceryList {
   id: string;
   itemIds: string[];
+  description: string;
   subtotalInDollars: number;
   totalIVA: number;
   totalInDollars: number;
@@ -12,7 +13,7 @@ export interface GroceryList {
   kontigoRate: number;
   kontigoRateId: string;
   dollarsTotalKontigo: number;
-  paided: boolean;
+  completed: boolean;
   createdAt: string;
 }
 
@@ -24,6 +25,7 @@ export const GROCERY_LIST_SCHEMA: RxJsonSchema<GroceryList>  = {
   properties: {
     id: { type: 'string', maxLength: 100 },
     itemIds: { type: 'array', items: { type: 'string' } },
+    description: { type: 'string', maxLength: 100 },
     subtotalInDollars: { type: 'number' },
     totalIVA: { type: 'number' },
     totalInDollars: { type: 'number' },
@@ -33,8 +35,8 @@ export const GROCERY_LIST_SCHEMA: RxJsonSchema<GroceryList>  = {
     kontigoRate: { type: 'number' },
     kontigoRateId: { type: 'string' },
     dollarsTotalKontigo: { type: 'number' },
-    paided: { type: 'boolean' },
+    completed: { type: 'boolean' },
     createdAt: { type: 'string', format: 'date-time' }
   },
-  required: ['id', 'itemIds', 'subtotalInDollars', 'totalIVA', 'totalInDollars', 'bcvRate', 'bcvRateId', 'bsTotalBCV', 'kontigoRate', 'kontigoRateId', 'dollarsTotalKontigo', 'paided', 'createdAt']
+  required: ['id', 'itemIds', 'subtotalInDollars', 'totalIVA', 'totalInDollars', 'bcvRate', 'bcvRateId', 'bsTotalBCV', 'kontigoRate', 'kontigoRateId', 'dollarsTotalKontigo', 'completed', 'createdAt']
 };

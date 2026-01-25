@@ -1,12 +1,22 @@
-<div class="w-100 vh-90 content-width justify-content-center align-items-top p-2">
+<div class="w-100 min-vh-90 content-width justify-content-center align-items-top p-2">
   <div class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
-    <div class="d-flex flex-row w-100">
+    <div class="d-flex flex-row w-100 mb-1">
       <div class="col-6 text-primary fw-bold">
         {{ 'GROCERIES_LIST.GROCERIES_LIST_DATE' | translate }}
       </div>
       <div class="col-6 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        {{ currentGroceryList()?.createdAt | date: 'dd/MM/yyyy HH:mm' }}
       </div>
+    </div>
+    <div class="d-flex flex-column w-100">
+      <div class="text-primary fw-bold">
+        {{ 'GROCERIES_LIST.DESCRIPTION' | translate }}
+      </div>
+      <input type="text" 
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary fw-semibold" 
+        [value]="currentGroceryList()?.description"
+        (change)="onDescriptionChange($event)"
+      />
     </div>
   </div>
 
@@ -18,6 +28,7 @@
       <div class="d-flex flex-row">
         <input type="number" 
         class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+        [value]="bcvRate()"
         disabled
         />
       </div>
@@ -29,6 +40,7 @@
       <div class="d-flex flex-row">
         <input type="number" 
         class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+        [value]="kontigoRate()"
         disabled
         />
       </div>
@@ -46,39 +58,47 @@
   <div id="ItemsList" 
   class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
     <div class="d-flex flex-row w-100 px-2 pb-1">
-      <div class="col-6 text-primary fw-bold px-2">
+      <div class="col-5 text-primary fw-bold px-2">
         {{ 'GENERAL.NAME' | translate }}
       </div>
       <div class="col-3 text-primary text-start fw-bold px-2">
         {{ 'GENERAL.WEIGHT' | translate }}
       </div>
-      <div class="col-2 text-primary text-end fw-bold px-2">
+      <div class="col-3 text-primary text-end fw-bold px-2">
         {{ 'GENERAL.PRICE' | translate }}
       </div>
     </div>
     <div class="d-flex flex-column overflow-y-auto max-item-height border border-primary rounded p-2">
-      @for( register of [0,1,2,3,4,5]; track $index){
+      @for( item of items(); track item.id){
         <button class="d-flex flex-row bg-primary-subtle border border-primary rounded p-2  shadow-sm text-primary fw-semibold bg-secondary-subtle
         position-relative item-btn"
         [ngClass]="{
-          'mt-2': $index !== 0,
+          'mt-2': !$first,
         }"
         (click)="showItemContent($index); $event.stopPropagation()"
         >
-          <span class="col-6 text-truncate pe-2"> 
-            Lorem Ipsun dolor d
+          <span class="col-5 text-truncate text-start pe-2"> 
+            {{ item.description }}
           </span>
           <span class="col-3 text-start px-2"> 
-            1,250Kg
+            {{ 
+              item.weight > 0 
+              ? (item.wieghtType === WeightType.GR ? item.weight + 'Gr' : item.weight + 'Kg') 
+              : '' 
+            }}
           </span>
-          <span class="col-2 text-end ps-1"> 
-            5$ 
+          <span class="col-3 text-end ps-1"> 
+            $ {{ item.totalInDollars | number: '1.2-2' }}
           </span>
           <button class="d-flex justify-content-center align-items-center col-1 btn btn-danger btn-sm border-danger position-absolute top-0 end-0 mt-1 me-1" 
           (click)="showConfirmDeleteItem($index); $event.stopPropagation()">
             <i class="bi bi-x-circle-fill text-white"></i>
           </button>
         </button>
+      } @empty {
+        <div class="text-center text-primary py-3">
+          {{ 'GROCERIES_LIST.NO_ITEMS' | translate }}
+        </div>
       }
     </div>
   </div>
@@ -89,7 +109,7 @@
         {{ 'GROCERIES_LIST.SUBTOTAL_DOLLARS' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        $ {{ summarySubtotal() | number: '1.2-2' }} 
       </div>
     </div>
     <div class="d-flex flex-row w-100">
@@ -97,7 +117,7 @@
         {{ 'GROCERIES_LIST.TOTAL_IVA' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        $ {{ summaryIVA() | number: '1.2-2' }}
       </div>
     </div>
     <div class="d-flex flex-row w-100 border-bottom border-primary border-2">
@@ -105,7 +125,7 @@
         {{ 'GROCERIES_LIST.TOTAL_IN_DOLLARS' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        $ {{ summaryTotal() | number: '1.2-2' }}
       </div>
     </div>
 
@@ -114,7 +134,7 @@
         {{ 'GROCERIES_LIST.BCV_RATE' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        Bs {{ bcvRate() | number: '1.2-2' }}
       </div>
     </div>
     <div class="d-flex flex-row w-100 border-bottom border-primary border-2">
@@ -122,7 +142,7 @@
         {{ 'GROCERIES_LIST.BS_TOTAL_BCV' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        Bs {{ (summaryTotal() * bcvRate()) | number: '1.2-2' }}
       </div>
     </div>
     <div class="d-flex flex-row w-100">
@@ -130,7 +150,7 @@
         {{ 'GROCERIES_LIST.KONTIGO_RATE' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        Bs {{ kontigoRate() | number: '1.2-2' }}
       </div>
     </div>
     <div class="d-flex flex-row w-100">
@@ -138,15 +158,32 @@
         {{ 'GROCERIES_LIST.DOLLARS_TOTAL_KONTIGO' | translate }}
       </div>
       <div class="col-4 text-end text-primary fw-semibold">
-        {{ exchangeRateDate.toPlainDate().toString() }}
+        $ {{ kontigoRate() > 0 ? (summaryTotal() * bcvRate() / kontigoRate() | number: '1.2-2') : '0.00' }}
       </div>
     </div>
+  </div>
+
+  <div class="d-flex flex-row gap-2 mt-3 mb-4">
+    <button class="btn btn-primary fw-bold w-50 shadow-sm py-2"
+      (click)="showConfirmComplete()"
+      [disabled]="items().length === 0"
+    >
+      <i class="bi bi-check-all me-1"></i>
+      {{ 'GROCERIES_LIST.COMPLETE_SHOP' | translate }}
+    </button>
+
+    <button class="btn btn-danger fw-bold w-50 shadow-sm py-2"
+      (click)="showConfirmDiscard()"
+    >
+      <i class="bi bi-trash-fill me-1"></i>
+      {{ 'GROCERIES_LIST.DISCARD_SHOP' | translate }}
+    </button>
   </div>
 
 </div>
 
 <ng-template #itemContent>
-  <div id="itemContentContainer" 
+  <div id="itemContentContainer" [formGroup]="itemForm"
   class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
     <div class="text-center text-primary fw-bold w-100 position-relative">
       <h3>
@@ -160,8 +197,9 @@
       <div class="col-6 text-primary fw-bold ">
         {{ 'GENERAL.NAME' | translate }}
       </div>
-      <input type="number" 
+      <input type="text" 
       class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      formControlName="description"
       />
     </div>
   
@@ -171,6 +209,7 @@
       </div>
       <input type="number" 
       class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      formControlName="price"
       />
     </div>
 
@@ -180,24 +219,73 @@
       </div>
       <input type="number" 
       class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
-      value="1"
+      formControlName="quantity"
       />
     </div>
-    @if(!showWeightOptions){
-      <button class="btn btn-info shadow-sm text-white fw-bold mt-2 me-2"
-      (click)="showWeightOptions = true"
+
+    <div class="d-flex flex-row flex-wrap">
+      <div class="col-12 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.IVA_TYPE' | translate }}
+      </div>
+      <div class="col-6 d-flex flex-row "> 
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <input id="radioGeneral" type="radio" 
+          class="btn-check text-primary"
+          formControlName="IVAType" 
+          [value]="IVAType.GENERAL"
+          autocomplete="off" 
+          />
+          <label class="btn btn-outline-primary" 
+          for="radioGeneral"
+          >
+            {{IVAType.GENERAL}}
+          </label>
+
+          <input id="radioReduced" type="radio" 
+          class="btn-check text-primary" 
+          formControlName="IVAType" 
+          [value]="IVAType.REDUCED"
+          autocomplete="off"
+          />
+          <label class="btn btn-outline-primary" 
+          for="radioReduced"
+          >
+            {{IVAType.REDUCED}}
+          </label>
+
+          <input id="radioExcempt" type="radio" 
+          class="btn-check text-primary" 
+          formControlName="IVAType" 
+          [value]="IVAType.EXEMPT"
+          autocomplete="off"
+          />
+          <label class="btn btn-outline-primary" 
+          for="radioExcempt"
+          >
+            {{IVAType.EXEMPT}}
+          </label>
+        </div>
+      </div>
+      <button class="col-6 btn shadow-sm text-white fw-bold"
+      [ngClass]="{
+        'btn-danger':showWeightOptions,
+        'btn-info': !showWeightOptions
+      }"
+      (click)="showWeightOptions = !showWeightOptions"
       >
-        {{ 'GENERAL.WEIGHT'| translate }}
-        <i class="bi bi-plus-circle-fill"></i>
+        @if(!showWeightOptions){
+          {{ 'GENERAL.WEIGHT'| translate }}
+          <i class="bi bi-plus-circle-fill"></i>
+        }
+        @else{
+          {{ 'GENERAL.WEIGHT'| translate }}
+          <i class="bi bi-x-circle-fill"></i>
+        } 
       </button>
-    }
+    </div>
+
+
     @if(showWeightOptions){
-      <button class="btn btn-danger shadow-sm text-white fw-bold mt-2"
-      (click)="showWeightOptions = false"
-      >
-        {{ 'GENERAL.WEIGHT'| translate }}
-        <i class="bi bi-x-circle-fill"></i>
-      </button>
       <div>
         <div class="col-6 text-primary fw-bold ">
           {{ 'GENERAL.WEIGHT' | translate }}
@@ -205,22 +293,32 @@
         <div class="d-flex flex-row "> 
           <input type="number" 
           class="form-control border border-primary bg-secondary-subtle shadow-sm me-2 text-primary" 
+          formControlName="weight"
           />
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <div  class="btn-group" role="group" aria-label="Basic radio toggle button group">
             <input id="radioGr" type="radio" 
             class="btn-check text-primary"
-             name="btnradio" 
+             formControlName="wieghtType" 
+             [value]="WeightType.GR"
             autocomplete="off" 
-            checked
             />
-            <label class="btn btn-outline-primary" for="radioGr">Gr</label>
+            <label class="btn btn-outline-primary" 
+            for="radioGr"
+            >
+              Gr
+            </label>
   
             <input id="radioKg" type="radio" 
             class="btn-check text-primary" 
-            name="btnradio" 
+             formControlName="wieghtType" 
+            [value]="WeightType.KG"
             autocomplete="off"
             />
-            <label class="btn btn-outline-primary" for="radioKg">Kg</label>
+            <label class="btn btn-outline-primary" 
+            for="radioKg"
+            >
+              Kg
+            </label>
           </div>
         </div>
       </div>
@@ -229,16 +327,29 @@
 
     <div>
       <div class="col-6 text-primary fw-bold ">
+        {{ 'GENERAL.SUBTOTAL' | translate }}
+      </div>
+      <input type="text" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary"
+      [value]="subtotalPrice() | number: '1.2-2'"
+      disabled 
+      />
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold ">
         {{ 'GENERAL.TOTAL' | translate }}
       </div>
-      <input type="number" 
-      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+      <input type="text" 
+      class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary"
+      [value]="totalPrice() | number: '1.2-2'"
+      disabled 
       />
     </div>
 
 
     <div class="d-flex flex-row mt-2">
-      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50">
+      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50" (click)="onSubmitItem()">
         <i class="bi bi-check-circle-fill"></i>
         {{ 'GENERAL.ACCEPT'| translate }}
       </button>
@@ -257,7 +368,7 @@
     <div class="text-center text-primary fw-bold w-100 position-relative"
     >
       <h3>
-        {{ 'GROCERIES_LIST_HISTORY.DELETE_ITEM' | translate }}
+        {{ 'GROCERIES_LIST_HISTORICAL.DELETE_ITEM' | translate }}
       </h3>
       
       <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
@@ -267,18 +378,81 @@
 
     <div>
       <div class="text-primary text-center fw-semibold ">
-        {{ 'GROCERIES_LIST_HISTORY.CONFIRM_DELETE_ITEM' | translate }}
+        {{ 'GROCERIES_LIST_HISTORICAL.CONFIRM_DELETE_ITEM' | translate }}
       </div>
     </div>
   
 
 
     <div class="d-flex flex-row mt-2">
-      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50">
+      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50" (click)="onDeleteItem()">
         <i class="bi bi-check-circle-fill"></i>
         {{ 'GENERAL.ACCEPT'| translate }}
       </button>
       <button class="btn btn-danger shadow-sm text-white fw-bold mt-2 w-50" (click)="closeDialog()">
+        <i class="bi bi-x-circle-fill"></i>
+        {{ 'GENERAL.CANCEL'| translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #confirmComplete>
+  <div id="ConfirmCompleteContainer" 
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
+    
+    <div class="text-center text-primary fw-bold w-100 position-relative">
+      <h3>
+        {{ 'GROCERIES_LIST.CONFIRM_COMPLETE_TITLE' | translate }}
+      </h3>
+      <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+      (click)="closeDialog()"
+      ></button>
+    </div>
+
+    <div class="py-3 px-2">
+      <div class="text-primary text-center fw-semibold ">
+        {{ 'GROCERIES_LIST.CONFIRM_COMPLETE_MESSAGE' | translate }}
+      </div>
+    </div>
+  
+    <div class="d-flex flex-row gap-2 mt-2">
+      <button class="btn btn-primary shadow-sm text-white fw-bold w-50" (click)="onCompleteShop()">
+        <i class="bi bi-check-circle-fill"></i>
+        {{ 'GENERAL.ACCEPT'| translate }}
+      </button>
+      <button class="btn btn-danger shadow-sm text-white fw-bold w-50" (click)="closeDialog()">
+        <i class="bi bi-x-circle-fill"></i>
+        {{ 'GENERAL.CANCEL'| translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #confirmDiscard>
+  <div id="ConfirmDiscardContainer" 
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
+    
+    <div class="text-center text-primary fw-bold w-100 position-relative">
+      <h3>
+        {{ 'GROCERIES_LIST.CONFIRM_DISCARD_TITLE' | translate }}
+      </h3>
+      <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+      (click)="closeDialog()"
+      ></button>
+    </div>
+
+    <div class="py-3 px-2">
+      <div class="text-primary text-center fw-semibold ">
+        {{ 'GROCERIES_LIST.CONFIRM_DISCARD_MESSAGE' | translate }}
+      </div>
+    </div>
+  
+    <div class="d-flex flex-row gap-2 mt-2">
+      <button class="btn btn-danger shadow-sm text-white fw-bold w-50" (click)="onDiscardShop()">
+        <i class="bi bi-trash-fill"></i>
+        {{ 'GENERAL.ACCEPT'| translate }}
+      </button>
+      <button class="btn btn-primary shadow-sm text-white fw-bold w-50" (click)="closeDialog()">
         <i class="bi bi-x-circle-fill"></i>
         {{ 'GENERAL.CANCEL'| translate }}
       </button>

@@ -5,21 +5,21 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-groceries-list-history-page',
+  selector: 'app-groceries-list-historical-page',
   imports: [TranslateModule, NgClass],
-  templateUrl: './groceries-list-history-page.html',
-  styleUrl: './groceries-list-history-page.scss',
+  templateUrl: './groceries-list-historical-page.html',
+  styleUrl: './groceries-list-historical-page.scss',
 })
-export class GroceriesListHistoryPage {
+export class GroceriesListHistoricalPage {
   layout = inject(Layout);
 
   ngOnInit(): void {
     this.layout.cleanBreadcrumb();
-    this.layout.setHeaderTitle('GROCERIES_LIST_HISTORY.TITLE');
+    this.layout.setHeaderTitle('GROCERIES_LIST_HISTORICAL.TITLE');
     const breadcrumbItem: IBreadcrumb = {
-      id: "GroceriesListHistory",
-      label: "GROCERIES_LIST_HISTORY.BREADCRUMB_NAME",
-      url: "/groceries-list-history"
+      id: "GroceriesListHistorical",
+      label: "GROCERIES_LIST_HISTORICAL.BREADCRUMB_NAME",
+      url: "/groceries-list-historical"
     }
     this.layout.setBreadcrumbItem(breadcrumbItem);
   }

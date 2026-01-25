@@ -1,29 +1,35 @@
 {
-  "GENERAL":{
-    "DATE":"Date",
-    "NAME":"Name",
-    "WEIGHT":"Weight",
-    "WEIGHT_BY_KG":"Weight x KG",
-    "PRICE":"Price",
-    "BASE_PRICE":"Base price",
-    "DESCRIPTION":"Descripción",
-    "TOTAL":"Total",
-    "PRODUCT":"Product",
-    "ACCEPT":"Accept",
-    "REJECT":"Reject",
-    "CANCEL":"Cancel",
-    "ADD":"Add",
-    "QUANTITY":"Quantity",
-    "LOADING":"Loading",
-    "AMOUNT":"AMOUNT"
+  "GENERAL": {
+    "DATE": "Date",
+    "NAME": "Name",
+    "WEIGHT": "Weight",
+    "WEIGHT_BY_KG": "Weight x KG",
+    "PRICE": "Price",
+    "BASE_PRICE": "Base price",
+    "DESCRIPTION": "Descripción",
+    "SUBTOTAL": "Subtotal",
+    "TOTAL": "Total",
+    "PRODUCT": "Product",
+    "ACCEPT": "Accept",
+    "REJECT": "Reject",
+    "CANCEL": "Cancel",
+    "ADD": "Add",
+    "QUANTITY": "Quantity",
+    "LOADING": "Loading",
+    "AMOUNT": "AMOUNT"
   },
   "HOME": {
     "BREADCRUMB_NAME": "Home",
     "TITLE": "🛒Count my groceries🛒",
-    "REGISTER_GROCERIES": "Register Market",
-    "GROCERIES_LIST_HISTORY": "Market History",
+    "REGISTER_GROCERIES": "Register Shop",
+    "CONTINUE_SHOP": "Continue with the shop",
+    "GROCERIES_LIST_HISTORICAL": "Shop Historical",
     "EXCHANGE_RATE": "Exchange Rate",
-    "LANGUAGE": "Language"
+    "LANGUAGE": "Language",
+    "PENDING_SHOP_TITLE": "Pending Purchase",
+    "PENDING_SHOP_MESSAGE": "You have an incomplete purchase. What would you like to do?",
+    "ACCEPT_AND_CONTINUE": "Accept and complete",
+    "DISCARD_SHOP": "Discard shop"
   },
   "EXCHANGE_RATE": {
     "BREADCRUMB_NAME": "Exchange Rate",
@@ -36,26 +42,34 @@
     "RATE_ONE": "BCV",
     "RATE_TWO": "Kontigo",
     "RATE_TYPE": "Rate",
-    "ADD_RATE":"Agregar tasa",
-    "EDIT_RATE":"Editar tasa"
+    "ADD_RATE": "Agregar tasa",
+    "EDIT_RATE": "Editar tasa"
   },
-  "GROCERIES_LIST":{
+  "GROCERIES_LIST": {
     "BREADCRUMB_NAME": "Groceries List",
     "TITLE": "Groceries List",
-    "GROCERIES_LIST_DATE":"Groceries list date",
-    "DESCRIPTION":"Description",
-    "ITEMS":"Items",
-    "SUBTOTAL_DOLLARS":"Subtotal $",
-    "TOTAL_IVA":"Total IVA",
-    "TOTAL_IN_DOLLARS":"Total #",
-    "BCV_RATE":"BCV rate",
-    "BS_TOTAL_BCV":"Total Bs(BCV) to pay",
-    "KONTIGO_RATE":"Kontigo rate",
-    "DOLLARS_TOTAL_KONTIGO":"Total $ (Kontigo) to pay" 
+    "GROCERIES_LIST_DATE": "Groceries list date",
+    "DESCRIPTION": "Description",
+    "ITEMS": "Items",
+    "SUBTOTAL_DOLLARS": "Subtotal $",
+    "TOTAL_IVA": "Total IVA",
+    "TOTAL_IN_DOLLARS": "Total #",
+    "BCV_RATE": "BCV rate",
+    "BS_TOTAL_BCV": "Total Bs(BCV) to pay",
+    "KONTIGO_RATE": "Kontigo rate",
+    "DOLLARS_TOTAL_KONTIGO": "Total $ (Kontigo) to pay",
+    "IVA_TYPE": "IVA TYPE",
+    "NO_ITEMS": "No items",
+    "COMPLETE_SHOP": "Complete shopping",
+    "CONFIRM_COMPLETE_TITLE": "Finalize purchase",
+    "CONFIRM_COMPLETE_MESSAGE": "Are you sure you want to complete the shopping? Once finalized, it cannot be modified.",
+    "DISCARD_SHOP": "Discard shop",
+    "CONFIRM_DISCARD_TITLE": "Discard shop",
+    "CONFIRM_DISCARD_MESSAGE": "Are you sure you want to discard this shop? All items will be deleted and the record will not be saved."
   },
-  "GROCERIES_LIST_HISTORY":{
-    "BREADCRUMB_NAME": "Groceries List History",
-    "TITLE": "Groceries List History",
+  "GROCERIES_LIST_HISTORICAL": {
+    "BREADCRUMB_NAME": "Groceries List Historical",
+    "TITLE": "Groceries List Historical",
     "CONFIRM_DELETE_ITEM": "Are you sure you want to delete this item?"
   }
 }

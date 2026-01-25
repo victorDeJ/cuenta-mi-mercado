@@ -6,6 +6,11 @@
 button{
   box-shadow: var(--bs-box-shadow-sm) !important;
 }
+input{
+  &.disabled, &:disabled{
+    filter: brightness(0.8);
+  }
+}
 
 @for $i from 1 through 9 {
   $size: $i * 10;
