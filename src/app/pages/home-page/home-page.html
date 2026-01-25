@@ -3,7 +3,7 @@
     {{ 'HOME.TITLE' | translate }}
   </h1>
 
-  <div class="d-flex justify-content-end align-items-center ">
+  <!-- <div class="d-flex justify-content-end align-items-center ">
     <div class="text-primary fw-bold pe-2 ">
       {{ 'HOME.LANGUAGE' | translate }}
     </div>
@@ -14,12 +14,15 @@
       <input type="radio" class="btn-check" name="language" id="lang-en" autocomplete="off" (click)="useLanguage('en')">
       <label class="btn btn-outline-primary" for="lang-en">EN</label>
     </div>
-  </div>
+  </div> -->
+
+  <hr>
 
   @if (pendingList()) {
     <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
     (click)="navigateToPage('groceries-list')"
     > 
+      <i class="bi bi-play-circle-fill me-1"></i>
       {{ 'HOME.CONTINUE_SHOP' | translate }} 
     </button>
   }
@@ -27,17 +30,22 @@
   <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
   (click)="onRegisterShop()"
   > 
+    <i class="bi bi-plus-circle-fill me-1"></i>
     {{ 'HOME.REGISTER_GROCERIES' | translate }} 
   </button>
+
+  <hr>
 
   <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
   (click)="navigateToPage('groceries-list-historical')"
   >
+    <i class="bi bi-file-text-fill me-1"></i>
     {{ 'HOME.GROCERIES_LIST_HISTORICAL' | translate }} 
   </button>
   <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
   (click)="navigateToPage('exchange-rate')"
   > 
+    <i class="bi bi-currency-exchange me-1"></i>
     {{ 'HOME.EXCHANGE_RATE' | translate }} 
   </button>
 
