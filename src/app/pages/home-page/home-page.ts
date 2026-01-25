@@ -27,22 +27,24 @@ export class HomePage implements OnInit {
     this.checkPendingStatus();
   }
 
-  async checkPendingStatus() {
-    try {
-      const data = await this.database.getData(Collection.GROCERY_LIST, {
-        selector: { completed: false },
-        limit: 1
-      }) as GroceryList[];
-      
-      if (data && data.length > 0) {
-        this.pendingList.set(data[0]);
-      } else {
+  checkPendingStatus() {
+    setTimeout(async() => {
+      try {
+        const data = await this.database.getData(Collection.GROCERY_LIST, {
+          selector: { completed: false },
+          limit: 1
+        }) as GroceryList[];
+        
+        if (data && data.length > 0) {
+          this.pendingList.set(data[0]);
+        } else {
+          this.pendingList.set(null);
+        }
+      } catch (error) {
+        console.error('Error checking pending status:', error);
         this.pendingList.set(null);
       }
-    } catch (error) {
-      console.error('Error checking pending status:', error);
-      this.pendingList.set(null);
-    }
+    }, 500);
   }
 
   useLanguage(language: string): void {
