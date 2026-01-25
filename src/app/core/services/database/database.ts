@@ -75,13 +75,22 @@ export class Database {
     return this.dbPromise;
   }
 
-  async getData(collectionName: string, id?: string) {
+  async getData(collectionName: string, idOrQuery?: string | any) {
     const db = await this.getDb();
     const collection = db.collections[collectionName];
-    if (id) {
-      return await collection.findOne(id).exec();
+
+    if (!idOrQuery) {
+      const docs = await collection.find().exec();
+      return docs.map((doc) => doc.toJSON());
     }
-    return (await collection.find().exec()).map((doc) => doc.toJSON());
+
+    if (typeof idOrQuery === 'string') {
+      const doc = await collection.findOne(idOrQuery).exec();
+      return doc ? doc.toJSON() : null;
+    }
+
+    const docs = await collection.find(idOrQuery).exec();
+    return docs.map((doc) => doc.toJSON());
   }
 
   async insertData(collectionName: string, data: any) {
