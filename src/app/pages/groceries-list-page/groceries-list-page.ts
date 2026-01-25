@@ -216,7 +216,7 @@ export class GroceriesListPage {
     } else {
       const newList: GroceryList = {
         id: crypto.randomUUID(),
-        description: 'New Grocery List',
+        description: 'Mercado',
         itemIds: this.items().map(i => i.id),
         subtotalInDollars: this.summarySubtotal(),
         totalIVA: this.summaryIVA(),
@@ -387,9 +387,10 @@ export class GroceriesListPage {
     this.dialog.closeAll();
     this.layout.setToLoading();
     try {
-      // 1. Mark as completed
+      // 1. Mark as completed and save items
       await this.database.updateData(Collection.GROCERY_LIST, list.id, {
-        completed: true
+        completed: true,
+        items: this.items()
       });
 
       // 2. Clear current grocery items
@@ -399,7 +400,7 @@ export class GroceriesListPage {
       }
 
       this.currentGroceryList.set(null);
-      this.router.navigateByUrl('home');
+      this.router.navigateByUrl('/home');
     } catch (error) {
       console.error('Error completing shop:', error);
     } finally {

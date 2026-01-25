@@ -17,6 +17,7 @@
         @for( register of groceryLists(); track register.id){
           <div class="item-btn d-flex flex-row bg-primary-subtle border border-primary rounded p-2 shadow-sm text-primary fw-semibold bg-secondary-subtle
           position-relative"
+          (click)="openList(register.id)"
           [ngClass]="{
             'mt-2': !$first,
           }">
@@ -27,7 +28,7 @@
              {{ register.description }}
            </span>
            <span class="col-3 text-end"> 
-             {{ register.dollarsTotalKontigo | currency }}
+             $ {{ register.dollarsTotalKontigo || register.totalInDollars | number: '1.2-2' }}
            </span>
           </div>
         } @empty {

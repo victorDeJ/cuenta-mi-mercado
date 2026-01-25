@@ -1,8 +1,10 @@
 import { RxJsonSchema } from "rxdb";
+import { GroceryItem } from "./grocery-item";
 
 export interface GroceryList {
   id: string;
   itemIds: string[];
+  items?: GroceryItem[];
   description: string;
   subtotalInDollars: number;
   totalIVA: number;
@@ -25,6 +27,24 @@ export const GROCERY_LIST_SCHEMA: RxJsonSchema<GroceryList>  = {
   properties: {
     id: { type: 'string', maxLength: 100 },
     itemIds: { type: 'array', items: { type: 'string' } },
+    items: { 
+      type: 'array', 
+      items: { 
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          groceryListId: { type: 'string' },
+          description: { type: 'string' },
+          price: { type: 'number' },
+          quantity: { type: 'number' },
+          IVAType: { type: 'string' },
+          weight: { type: 'number' },
+          wieghtType: { type: 'number' },
+          totalInDollars: { type: 'number' },
+          createdAt: { type: 'string' }
+        }
+      } 
+    },
     description: { type: 'string', maxLength: 100 },
     subtotalInDollars: { type: 'number' },
     totalIVA: { type: 'number' },

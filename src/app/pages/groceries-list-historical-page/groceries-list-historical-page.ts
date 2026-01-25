@@ -1,21 +1,23 @@
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Layout } from '../../core/services/layout/layout';
 import { IBreadcrumb } from '../../core/services/layout/interfaces/breadcrumb.interface';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgClass, DatePipe, CurrencyPipe } from '@angular/common';
+import { NgClass, DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Database } from '../../core/services/database/database';
 import { Collection } from '../../core/services/database/enums/collections';
 import { GroceryList } from '../../core/services/database/collections/grocery-list';
 
 @Component({
   selector: 'app-groceries-list-historical-page',
-  imports: [TranslateModule, NgClass, DatePipe, CurrencyPipe],
+  imports: [TranslateModule, NgClass, DatePipe, DecimalPipe],
   templateUrl: './groceries-list-historical-page.html',
   styleUrl: './groceries-list-historical-page.scss',
 })
 export class GroceriesListHistoricalPage {
   layout = inject(Layout);
   db = inject(Database);
+  router = inject(Router);
 
   groceryLists = signal<GroceryList[]>([]);
 
@@ -34,7 +36,11 @@ export class GroceriesListHistoricalPage {
 
   async loadGroceryLists() {
     try {
-      const data = await this.db.getData(Collection.GROCERY_LIST);
+      const data = await this.db.getData(Collection.GROCERY_LIST, {
+        selector: {
+          completed: true
+        }
+      });
       console.log('Loaded grocery lists:', data);
       const sortedLists = (data as GroceryList[]).sort((a, b) => 
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -43,5 +49,9 @@ export class GroceriesListHistoricalPage {
     } catch (error) {
       console.error('Error loading grocery lists:', error);
     }
+  }
+
+  openList(id: string) {
+    this.router.navigateByUrl(`/groceries-list-detail/${id}`);
   }
 }

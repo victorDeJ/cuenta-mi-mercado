@@ -1,0 +1,156 @@
+<div class="w-100 min-vh-90 content-width justify-content-center align-items-top p-2">
+  <div class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
+    <div class="d-flex flex-row w-100 mb-1">
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.GROCERIES_LIST_DATE' | translate }}
+      </div>
+      <div class="col-6 text-end text-primary fw-semibold">
+        {{ currentGroceryList()?.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+      </div>
+    </div>
+    <div class="d-flex flex-column w-100">
+      <div class="text-primary fw-bold">
+        {{ 'GROCERIES_LIST.DESCRIPTION' | translate }}
+      </div>
+      <input type="text" 
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary fw-semibold" 
+        [value]="currentGroceryList()?.description"
+        disabled
+      />
+    </div>
+  </div>
+
+  <div class="d-flex border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
+    <div class="col-6 d-flex flex-column pe-1">
+      <div class="text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.BCV_RATE' | translate }}
+      </div>
+      <div class="d-flex flex-row">
+        <input type="number" 
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+        [value]="bcvRate()"
+        disabled
+        />
+      </div>
+    </div>
+    <div class="col-6 d-flex flex-column ps-1">
+      <div class="text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.KONTIGO_RATE' | translate }}
+      </div>
+      <div class="d-flex flex-row">
+        <input type="number" 
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary" 
+        [value]="kontigoRate()"
+        disabled
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class=" d-flex flex-row align-items-center w-100 mt-3">
+    <h2 class="text-primary fw-semibold me-auto mb-0">{{ 'GROCERIES_LIST.ITEMS' | translate }}</h2>
+  </div>
+  
+  <div id="ItemsList" 
+  class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden ">
+    <div class="d-flex flex-row w-100 px-2 pb-1">
+      <div class="col-5 text-primary fw-bold px-2">
+        {{ 'GENERAL.NAME' | translate }}
+      </div>
+      <div class="col-3 text-primary text-start fw-bold px-2">
+        {{ 'GENERAL.WEIGHT' | translate }}
+      </div>
+      <div class="col-3 text-primary text-end fw-bold px-2">
+        {{ 'GENERAL.PRICE' | translate }}
+      </div>
+    </div>
+    <div class="d-flex flex-column overflow-y-auto max-item-height border border-primary rounded p-2">
+      @for( item of items(); track item.id){
+        <div class="d-flex flex-row bg-primary-subtle border border-primary rounded p-2  shadow-sm text-primary fw-semibold bg-secondary-subtle
+        position-relative item-btn"
+        [ngClass]="{
+          'mt-2': !$first,
+        }"
+        >
+          <span class="col-5 text-truncate text-start pe-2"> 
+            {{ item.description }}
+          </span>
+          <span class="col-3 text-start px-2"> 
+            {{ 
+              item.weight > 0 
+              ? (item.wieghtType === WeightType.GR ? item.weight + 'Gr' : item.weight + 'Kg') 
+              : '' 
+            }}
+          </span>
+          <span class="col-3 text-end ps-1"> 
+            $ {{ item.totalInDollars | number: '1.2-2' }} {{ item.IVAType }}
+          </span>
+        </div>
+      } @empty {
+        <div class="text-center text-primary py-3">
+          {{ 'GROCERIES_LIST.NO_ITEMS' | translate }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class=" border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm">
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.SUBTOTAL_DOLLARS' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        $ {{ summarySubtotal() | number: '1.2-2' }} 
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.TOTAL_IVA' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        $ {{ summaryIVA() | number: '1.2-2' }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100 border-bottom border-primary border-2">
+      <div class="col-8 text-primary fw-bold ">
+        {{ 'GROCERIES_LIST.TOTAL_IN_DOLLARS' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        $ {{ summaryTotal() | number: '1.2-2' }}
+      </div>
+    </div>
+
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.BCV_RATE' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        Bs {{ bcvRate() | number: '1.2-2' }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100 border-bottom border-primary border-2">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.BS_TOTAL_BCV' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        Bs {{ (summaryTotal() * bcvRate()) | number: '1.2-2' }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.KONTIGO_RATE' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        Bs {{ kontigoRate() | number: '1.2-2' }}
+      </div>
+    </div>
+    <div class="d-flex flex-row w-100">
+      <div class="col-8 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.DOLLARS_TOTAL_KONTIGO' | translate }}
+      </div>
+      <div class="col-4 text-end text-primary fw-semibold">
+        $ {{ kontigoRate() > 0 ? (summaryTotal() * bcvRate() / kontigoRate() | number: '1.2-2') : '0.00' }}
+      </div>
+    </div>
+  </div>
+
