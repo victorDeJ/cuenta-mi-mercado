@@ -28,6 +28,7 @@ export class HomePage implements OnInit {
   }
 
   checkPendingStatus() {
+    this.layout.setToLoading();
     setTimeout(async() => {
       try {
         const data = await this.database.getData(Collection.GROCERY_LIST, {
@@ -44,6 +45,7 @@ export class HomePage implements OnInit {
         console.error('Error checking pending status:', error);
         this.pendingList.set(null);
       }
+      this.layout.setToUnloading();
     }, 500);
   }
 
@@ -52,7 +54,7 @@ export class HomePage implements OnInit {
   }
 
   navigateToPage(url: string) {
-    this.router.navigateByUrl(url);
+    this.router.navigateByUrl(`/${url}`);
   }
 
   onRegisterShop() {
@@ -66,9 +68,29 @@ export class HomePage implements OnInit {
     }
   }
 
-  onContinue() {
-    this.dialog.closeAll();
-    this.navigateToPage('groceries-list');
+  async onContinue() {
+    const pending = this.pendingList();
+    if (!pending) return;
+
+    this.layout.setToLoading();
+    try {
+      await this.database.updateData(Collection.GROCERY_LIST, pending.id, {
+        completed: true
+      });
+
+      const items = await this.database.getData(Collection.GROCERY);
+      for (const item of items) {
+        await this.database.deleteData(Collection.GROCERY, item.id);
+      }
+
+      this.pendingList.set(null);
+      this.dialog.closeAll();
+      this.navigateToPage('groceries-list-historical');
+    } catch (error) {
+      console.error('Error completing shop:', error);
+    } finally {
+      this.layout.setToUnloading();
+    }
   }
 
   async onDiscard() {

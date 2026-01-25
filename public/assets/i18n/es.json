@@ -16,7 +16,8 @@
     "ADD": "Agregar",
     "QUANTITY": "Cantidad",
     "LOADING": "Cargando",
-    "AMOUNT": "Monto"
+    "AMOUNT": "Monto",
+    "EMPTY_LIST": "No hay registros"
   },
   "HOME": {
     "BREADCRUMB_NAME": "Inicio",
@@ -71,6 +72,7 @@
     "BREADCRUMB_NAME": "Histórico",
     "TITLE": "Histórico",
     "DELETE_ITEM": "Eliminar producto",
-    "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?"
+    "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?",
+    "EMPTY_LIST": "No hay mercados registrados"
   }
 }

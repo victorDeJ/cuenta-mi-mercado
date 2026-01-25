@@ -16,7 +16,8 @@
     "ADD": "Add",
     "QUANTITY": "Quantity",
     "LOADING": "Loading",
-    "AMOUNT": "AMOUNT"
+    "AMOUNT": "AMOUNT",
+    "EMPTY_LIST": "No records"
   },
   "HOME": {
     "BREADCRUMB_NAME": "Home",
@@ -70,6 +71,8 @@
   "GROCERIES_LIST_HISTORICAL": {
     "BREADCRUMB_NAME": "Groceries List Historical",
     "TITLE": "Groceries List Historical",
-    "CONFIRM_DELETE_ITEM": "Are you sure you want to delete this item?"
+    "DELETE_ITEM": "Delete item",
+    "CONFIRM_DELETE_ITEM": "Are you sure you want to delete this item?",
+    "EMPTY_LIST": "No grocery lists registered"
   }
 }
