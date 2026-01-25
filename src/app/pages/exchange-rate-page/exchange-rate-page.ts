@@ -82,7 +82,7 @@ export class ExchangeRatePage {
     if (element) {
       const top = element.getBoundingClientRect().top;
       
-      element.style.height = `calc(100vh - ${top}px - 10vh - 8px)`;
+      element.style.height = `calc(100vh - ${top}px - 10vh - 48px)`;
     }
   }
 
