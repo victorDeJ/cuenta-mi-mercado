@@ -88,7 +88,7 @@
             }}
           </span>
           <span class="col-3 text-end ps-1"> 
-            $ {{ item.totalInDollars | number: '1.2-2' }}
+            $ {{ item.totalInDollars | number: '1.2-2' }} {{ item.IVAType }}
           </span>
           <button class="d-flex justify-content-center align-items-center col-1 btn btn-danger btn-sm border-danger position-absolute top-0 end-0 mt-1 me-1" 
           (click)="showConfirmDeleteItem($index); $event.stopPropagation()">
