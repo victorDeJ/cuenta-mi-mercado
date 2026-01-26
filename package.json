@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-android": "ng build && npx cap sync && npx cap open android"
   },
   "prettier": {
     "printWidth": 100,
