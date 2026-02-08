@@ -71,7 +71,7 @@
   "GROCERIES_LIST_HISTORICAL": {
     "BREADCRUMB_NAME": "Histórico",
     "TITLE": "Histórico",
-    "DELETE_ITEM": "Eliminar producto",
+    "DELETE_ITEM": "Eliminar",
     "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?",
     "EMPTY_LIST": "No hay mercados registrados"
   }

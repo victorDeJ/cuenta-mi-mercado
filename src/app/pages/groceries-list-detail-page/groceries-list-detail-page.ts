@@ -34,15 +34,25 @@ export class GroceriesListDetailPage {
   @ViewChild('confirmDiscard') confirmDiscard!: TemplateRef<any>;
 
   exchangeRateDate: Temporal.ZonedDateTime = Temporal.Now.zonedDateTimeISO('UTC');
-  IVAType = IVAType
-  
+  IVAType = IVAType;
+
   bcvRate = signal<number>(0);
   bcvRateId = signal<string>('');
-  kontigoRate = signal<number>(0);
+  kontigoRate = signal<number>(0); 
   kontigoRateId = signal<string>('');
   WeightType = WeightType;
 
   currentGroceryList = signal<GroceryList | null>(null);
+  currency = signal<'USD' | 'BS'>('USD');
+
+  activeBcvRate = computed(() => {
+    const listRate = this.currentGroceryList()?.bcvRate;
+    return listRate && listRate > 0 ? listRate : this.bcvRate();
+  });
+
+  toggleCurrency(type: 'USD' | 'BS') {
+    this.currency.set(type);
+  }
 
   items = signal<GroceryItem[]>([]);
 
@@ -52,7 +62,7 @@ export class GroceriesListDetailPage {
       if (item.weight > 0) {
         weightMultiplier = item.wieghtType === WeightType.GR ? item.weight / 1000 : item.weight;
       }
-      return acc + (item.price * item.quantity * weightMultiplier);
+      return acc + item.price * item.quantity * weightMultiplier;
     }, 0);
   });
 
@@ -66,8 +76,8 @@ export class GroceriesListDetailPage {
       let ivaRate = 0;
       if (item.IVAType === IVAType.GENERAL) ivaRate = 0.16;
       else if (item.IVAType === IVAType.REDUCED) ivaRate = 0.08;
-      
-      return acc + (baseTotal * ivaRate);
+
+      return acc + baseTotal * ivaRate;
     }, 0);
   });
 
@@ -87,7 +97,7 @@ export class GroceriesListDetailPage {
     };
     this.layout.setBreadcrumbItem(breadcrumbItem);
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.loadList(id);
@@ -98,16 +108,16 @@ export class GroceriesListDetailPage {
   async loadList(id: string) {
     this.layout.setToLoading();
     try {
-      const list = await this.database.getData(Collection.GROCERY_LIST, id) as GroceryList;
+      const list = (await this.database.getData(Collection.GROCERY_LIST, id)) as GroceryList;
       if (list) {
         this.currentGroceryList.set(list);
-        
+
         // Use items from the grocery list object if available
         if (list.items) {
           this.items.set(list.items);
         } else {
-           // Fallback or empty if items were not saved in the new format
-           this.items.set([]);
+          // Fallback or empty if items were not saved in the new format
+          this.items.set([]);
         }
 
         this.bcvRate.set(list.bcvRate);
@@ -119,5 +129,4 @@ export class GroceriesListDetailPage {
       this.layout.setToUnloading();
     }
   }
-
 }

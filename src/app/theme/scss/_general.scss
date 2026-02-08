@@ -15,7 +15,7 @@ input{
 @for $i from 1 through 9 {
   $size: $i * 10;
   .h-#{$size} {
-    height: #{$size}+'%' !important;
+    height: #{$size}+"%" !important;
   }
   .vh-#{$size} {
     height: #{$size}vh !important;
@@ -23,4 +23,29 @@ input{
   .min-vh-#{$size} {
     min-height: #{$size}vh !important;
   }
+}
+
+// Custom Scrollbar for better visibility on Android/Webview
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba($primary, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($primary, 0.2);
+  border-radius: 10px;
+  &:hover {
+    background: rgba($primary, 0.4);
+  }
+}
+
+// Ensure overflow-y-auto always shows scrollbar if needed
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba($primary, 0.2) transparent;
 }

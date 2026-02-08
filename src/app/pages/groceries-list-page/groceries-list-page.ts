@@ -37,8 +37,8 @@ export class GroceriesListPage {
   @ViewChild('confirmDiscard') confirmDiscard!: TemplateRef<any>;
 
   exchangeRateDate: Temporal.ZonedDateTime = Temporal.Now.zonedDateTimeISO('UTC');
-  IVAType = IVAType
-  
+  IVAType = IVAType;
+
   bcvRate = signal<number>(0);
   bcvRateId = signal<string>('');
   kontigoRate = signal<number>(0);
@@ -46,44 +46,69 @@ export class GroceriesListPage {
   WeightType = WeightType;
 
   currentGroceryList = signal<GroceryList | null>(null);
+  currency = signal<'USD' | 'BS'>('USD');
+
+  activeBcvRate = computed(() => {
+    const listRate = this.currentGroceryList()?.bcvRate;
+    return listRate && listRate > 0 ? listRate : this.bcvRate();
+  });
+
+  toggleCurrency(type: 'USD' | 'BS') {
+    this.currency.set(type);
+  }
 
   itemForm = new FormGroup({
     id: new FormControl(''),
     description: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     price: new FormControl(0, [Validators.required, Validators.min(0.01)]),
     quantity: new FormControl(1, [Validators.required, Validators.min(1)]),
-    IVAType: new FormControl(IVAType.GENERAL, { nonNullable: true, validators: [Validators.required] }),
+    IVAType: new FormControl(IVAType.GENERAL, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     weight: new FormControl(0),
     wieghtType: new FormControl(WeightType.KG, { nonNullable: true }),
-    createdAt: new FormControl('')
+    createdAt: new FormControl(''),
   });
 
-  private formValue = toSignal(this.itemForm.valueChanges, { initialValue: this.itemForm.getRawValue() });
+  private formValue = toSignal(this.itemForm.valueChanges, {
+    initialValue: this.itemForm.getRawValue(),
+  });
 
   items = signal<GroceryItem[]>([]);
 
-  subtotalPrice = computed(() => {
+  priceInUSD = computed(() => {
+    const value = this.formValue();
+    const inputPrice = value.price ?? 0;
+    return this.currency() === 'USD' ? inputPrice : inputPrice / this.activeBcvRate();
+  });
+
+  modalSubtotalInUSD = computed(() => {
     const value = this.formValue();
     let weightMultiplier = 1;
     if (this.showWeightOptions && (value.weight ?? 0) > 0) {
-      weightMultiplier = value.wieghtType === WeightType.GR ? (value.weight ?? 0) / 1000 : (value.weight ?? 0);
+      weightMultiplier =
+        value.wieghtType === WeightType.GR ? (value.weight ?? 0) / 1000 : value.weight ?? 0;
     }
-    
-    const basePrice = value.price ?? 0;
+
+    const basePrice = this.priceInUSD();
     const quantity = value.quantity ?? 1;
     return basePrice * quantity * weightMultiplier;
   });
 
-  totalPrice = computed(() => {
+  modalTotalInUSD = computed(() => {
     const value = this.formValue();
-    const baseTotal = this.subtotalPrice();
-    
+    const baseTotal = this.modalSubtotalInUSD();
+
     let ivaMultiplier = 1;
     if (value.IVAType === IVAType.GENERAL) ivaMultiplier = 1.16;
     else if (value.IVAType === IVAType.REDUCED) ivaMultiplier = 1.08;
-    
+
     return baseTotal * ivaMultiplier;
   });
+
+  modalSubtotalInBS = computed(() => this.modalSubtotalInUSD() * this.activeBcvRate());
+  modalTotalInBS = computed(() => this.modalTotalInUSD() * this.activeBcvRate());
 
   summarySubtotal = computed(() => {
     return this.items().reduce((acc, item) => {
@@ -91,7 +116,7 @@ export class GroceriesListPage {
       if (item.weight > 0) {
         weightMultiplier = item.wieghtType === WeightType.GR ? item.weight / 1000 : item.weight;
       }
-      return acc + (item.price * item.quantity * weightMultiplier);
+      return acc + item.price * item.quantity * weightMultiplier;
     }, 0);
   });
 
@@ -105,8 +130,8 @@ export class GroceriesListPage {
       let ivaRate = 0;
       if (item.IVAType === IVAType.GENERAL) ivaRate = 0.16;
       else if (item.IVAType === IVAType.REDUCED) ivaRate = 0.08;
-      
-      return acc + (baseTotal * ivaRate);
+
+      return acc + baseTotal * ivaRate;
     }, 0);
   });
 
@@ -123,13 +148,13 @@ export class GroceriesListPage {
       const items = this.items();
       const bcv = this.bcvRate();
       const kontigo = this.kontigoRate();
-      
+
       const subtotal = this.summarySubtotal();
       const iva = this.summaryIVA();
       const total = this.summaryTotal();
 
       const updatedList: Partial<GroceryList> = {
-        itemIds: items.map(i => i.id),
+        itemIds: items.map((i) => i.id),
         subtotalInDollars: subtotal,
         totalIVA: iva,
         totalInDollars: total,
@@ -138,7 +163,7 @@ export class GroceriesListPage {
         bsTotalBCV: total * bcv,
         kontigoRate: kontigo,
         kontigoRateId: this.kontigoRateId(),
-        dollarsTotalKontigo: kontigo > 0 ? (total * bcv / kontigo) : 0
+        dollarsTotalKontigo: kontigo > 0 ? (total * bcv) / kontigo : 0,
       };
 
       try {
@@ -176,22 +201,22 @@ export class GroceriesListPage {
   }
 
   async getItems() {
-    const data = await this.database.getData(Collection.GROCERY) as GroceryItem[];
+    const data = (await this.database.getData(Collection.GROCERY)) as GroceryItem[];
     this.items.set(data.sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
   }
 
   async getExchangeRates() {
-    const bcvData = await this.database.getData(Collection.EXCHANGE_RATE, {
+    const bcvData = (await this.database.getData(Collection.EXCHANGE_RATE, {
       selector: { rateType: ExchangeRateType.BCV },
       sort: [{ createdAt: 'desc' }],
-      limit: 1
-    }) as ExchangeRate[];
+      limit: 1,
+    })) as ExchangeRate[];
 
-    const kontigoData = await this.database.getData(Collection.EXCHANGE_RATE, {
+    const kontigoData = (await this.database.getData(Collection.EXCHANGE_RATE, {
       selector: { rateType: ExchangeRateType.KONTIGO },
       sort: [{ createdAt: 'desc' }],
-      limit: 1
-    }) as ExchangeRate[];
+      limit: 1,
+    })) as ExchangeRate[];
 
     if (bcvData.length > 0) {
       this.bcvRate.set(bcvData[0].amount);
@@ -205,11 +230,11 @@ export class GroceriesListPage {
   }
 
   async getOrCreatePendingList() {
-    const lists = await this.database.getData(Collection.GROCERY_LIST, {
+    const lists = (await this.database.getData(Collection.GROCERY_LIST, {
       selector: { completed: false },
       sort: [{ createdAt: 'desc' }],
-      limit: 1
-    }) as GroceryList[];
+      limit: 1,
+    })) as GroceryList[];
 
     if (lists.length > 0) {
       this.currentGroceryList.set(lists[0]);
@@ -217,7 +242,7 @@ export class GroceriesListPage {
       const newList: GroceryList = {
         id: crypto.randomUUID(),
         description: 'Mercado',
-        itemIds: this.items().map(i => i.id),
+        itemIds: this.items().map((i) => i.id),
         subtotalInDollars: this.summarySubtotal(),
         totalIVA: this.summaryIVA(),
         totalInDollars: this.summaryTotal(),
@@ -226,9 +251,10 @@ export class GroceriesListPage {
         bsTotalBCV: this.summaryTotal() * this.bcvRate(),
         kontigoRate: this.kontigoRate(),
         kontigoRateId: this.kontigoRateId(),
-        dollarsTotalKontigo: this.kontigoRate() > 0 ? (this.summaryTotal() * this.bcvRate() / this.kontigoRate()) : 0,
+        dollarsTotalKontigo:
+          this.kontigoRate() > 0 ? (this.summaryTotal() * this.bcvRate()) / this.kontigoRate() : 0,
         completed: false,
-        createdAt: Temporal.Now.instant().toString()
+        createdAt: Temporal.Now.instant().toString(),
       };
       const inserted = await this.database.insertData(Collection.GROCERY_LIST, newList);
       this.currentGroceryList.set(inserted.toJSON() as GroceryList);
@@ -245,11 +271,17 @@ export class GroceriesListPage {
         IVAType: IVAType.GENERAL,
         weight: 0,
         wieghtType: WeightType.KG,
-        createdAt: ''
+        createdAt: '',
       });
       this.showWeightOptions = false;
     } else {
-      const item = this.items()[index];
+      const item = { ...this.items()[index] };
+      // Convertir el precio de base de USD a la moneda actual para visualización en el modal
+      if (this.currency() === 'BS') {
+        item.price = Number((item.price * this.activeBcvRate()).toFixed(2));
+      } else {
+        item.price = Number(item.price.toFixed(2));
+      }
       this.itemForm.patchValue(item);
       this.showWeightOptions = item.weight > 0;
     }
@@ -268,17 +300,20 @@ export class GroceriesListPage {
 
     const formValue = this.itemForm.getRawValue();
     this.layout.setToLoading();
-    
+
+    // El precio debe guardarse siempre en USD
+    const priceInUSD = this.priceInUSD();
+
     const finalItem: GroceryItem = {
       id: formValue.id || crypto.randomUUID(),
       description: formValue.description,
-      price: formValue.price ?? 0,
+      price: priceInUSD,
       quantity: formValue.quantity ?? 1,
       IVAType: formValue.IVAType,
       weight: this.showWeightOptions ? formValue.weight || 0 : 0,
       wieghtType: formValue.wieghtType,
-      totalInDollars: this.totalPrice(),
-      createdAt: formValue.createdAt || Temporal.Now.instant().toString()
+      totalInDollars: this.modalTotalInUSD(),
+      createdAt: formValue.createdAt || Temporal.Now.instant().toString(),
     };
 
     try {
@@ -308,6 +343,16 @@ export class GroceriesListPage {
     });
   }
 
+  deleteFromModal() {
+    const id = this.itemForm.get('id')?.value;
+    if (!id) return;
+
+    const index = this.items().findIndex((i) => i.id === id);
+    if (index !== -1) {
+      this.showConfirmDeleteItem(index);
+    }
+  }
+
   async onDeleteItem() {
     const index = this.deleteIndex();
     if (index === -1) return;
@@ -332,10 +377,10 @@ export class GroceriesListPage {
 
     try {
       await this.database.updateData(Collection.GROCERY_LIST, list.id, {
-        description: input.value
+        description: input.value,
       });
       // Actualizar el signal local
-      this.currentGroceryList.update(l => l ? { ...l, description: input.value } : null);
+      this.currentGroceryList.update((l) => (l ? { ...l, description: input.value } : null));
     } catch (error) {
       console.error('Error updating description:', error);
     }
@@ -390,7 +435,7 @@ export class GroceriesListPage {
       // 1. Mark as completed and save items
       await this.database.updateData(Collection.GROCERY_LIST, list.id, {
         completed: true,
-        items: this.items()
+        items: this.items(),
       });
 
       // 2. Clear current grocery items
