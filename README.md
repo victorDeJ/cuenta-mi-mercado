@@ -1,6 +1,6 @@
 # Cuenta Mi Mercado
 
-Una aplicación móvil desarrollada con Angular y Capacitor para gestionar listas de compras y realizar seguimiento de precios en diferentes monedas.
+Una aplicación móvil desarrollada con Angular y Capacitor para gestionar listas de compras y realizar seguimiento de precios en diferentes monedas. Pensado para las condiciones de Venezuela
 
 ## 📋 Descripción del Proyecto
 
