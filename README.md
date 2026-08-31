@@ -82,43 +82,43 @@ Antes de compilar la aplicación para Android, asegúrate de tener instalado:
 
 2. **Instalar dependencias**:
    ```bash
-   npm install
+   pnpm install
    ```
 
-## 📦 Compilación para Android
+## 🎨 Generación de Iconos y Splash Screen
 
-### Opción 1: Usando el script personalizado (Recomendado)
+Los recursos base se encuentran en la carpeta `resources/` (`icon-foreground.png`, `icon-background.png`, `splash.png`, etc.).
 
-Este comando realiza todo el proceso automáticamente:
+Para generar los iconos adaptativos y las pantallas de carga para Android:
 
 ```bash
-npm run build-android
+pnpm exec capacitor-assets generate --android
 ```
 
-Este script ejecuta:
+Posteriormente, sincroniza los cambios con Capacitor:
 
-1. Compilación de la aplicación Angular
-2. Sincronización con Capacitor
-3. Apertura de Android Studio
+```bash
+pnpm exec cap sync
+```
 
-### Opción 2: Paso a paso manual
+## 📦 Compilación para Android
 
 #### 1. Compilar la aplicación Angular:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 #### 2. Sincronizar con Capacitor:
 
 ```bash
-npx cap sync android
+pnpm exec cap sync android
 ```
 
 #### 3. Abrir el proyecto en Android Studio:
 
 ```bash
-npx cap open android
+pnpm exec cap open android
 ```
 
 ### 📱 Generar APK desde Android Studio
