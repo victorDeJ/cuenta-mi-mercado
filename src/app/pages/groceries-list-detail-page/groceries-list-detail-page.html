@@ -96,11 +96,12 @@
       class="d-flex flex-column overflow-y-auto max-item-height border border-primary rounded p-2"
     >
       @for( item of items(); track item.id){
-      <div
+      <button
         class="d-flex flex-row bg-primary-subtle border border-primary rounded p-2 shadow-sm text-primary fw-semibold bg-secondary-subtle position-relative item-btn"
         [ngClass]="{
           'mt-2': !$first,
         }"
+        (click)="showItemContent($index); $event.stopPropagation()"
       >
         <span class="col-5 text-truncate text-start pe-2">
           {{ item.description }}
@@ -122,7 +123,7 @@
           }}
           {{ item.IVAType }}
         </span>
-      </div>
+      </button>
       } @empty {
       <div class="text-center text-primary py-3">
         {{ 'GROCERIES_LIST.NO_ITEMS' | translate }}
@@ -207,3 +208,205 @@
     </div>
   </div>
 </div>
+
+<ng-template #itemContent>
+  <div
+    id="itemContentContainer"
+    class="border border-primary bg-primary-subtle rounded p-2 mt-2 shadow-sm overflow-hidden"
+  >
+    <div class="text-center text-primary fw-bold w-100 position-relative">
+      <h3>
+        {{ 'GENERAL.PRODUCT' | translate }}
+      </h3>
+      <button
+        class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+        (click)="closeDialog()"
+      ></button>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.NAME' | translate }}
+      </div>
+      <input
+        type="text"
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary"
+        [value]="selectedItem()?.description"
+        disabled
+      />
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.BASE_PRICE' | translate }}
+      </div>
+      <div class="input-group shadow-sm">
+        <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">
+          {{ currency() === 'USD' ? '$' : 'Bs' }}
+        </span>
+        <input
+          type="text"
+          class="form-control border border-primary bg-secondary-subtle text-primary"
+          [value]="selectedItemPrice() | number : '1.2-2'"
+          disabled
+        />
+      </div>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.QUANTITY' | translate }}
+      </div>
+      <input
+        type="number"
+        class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary"
+        [value]="selectedItem()?.quantity"
+        disabled
+      />
+    </div>
+
+    <div class="d-flex flex-row flex-wrap">
+      <div class="col-12 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.IVA_TYPE' | translate }}
+      </div>
+      <div class="col-12 d-flex flex-row">
+        <div class="btn-group w-100" role="group">
+          <input
+            id="detailRadioGeneral"
+            type="radio"
+            class="btn-check text-primary"
+            [checked]="selectedItem()?.IVAType === IVAType.GENERAL"
+            disabled
+          />
+          <label class="btn btn-outline-primary" for="detailRadioGeneral">
+            {{ IVAType.GENERAL }}
+          </label>
+
+          <input
+            id="detailRadioReduced"
+            type="radio"
+            class="btn-check text-primary"
+            [checked]="selectedItem()?.IVAType === IVAType.REDUCED"
+            disabled
+          />
+          <label class="btn btn-outline-primary" for="detailRadioReduced">
+            {{ IVAType.REDUCED }}
+          </label>
+
+          <input
+            id="detailRadioExcempt"
+            type="radio"
+            class="btn-check text-primary"
+            [checked]="selectedItem()?.IVAType === IVAType.EXEMPT"
+            disabled
+          />
+          <label class="btn btn-outline-primary" for="detailRadioExcempt">
+            {{ IVAType.EXEMPT }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    @if((selectedItem()?.weight ?? 0) > 0){
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.WEIGHT' | translate }}
+      </div>
+      <div class="d-flex flex-row">
+        <div class="btn-group me-2" role="group">
+          <input
+            id="detailRadioGr"
+            type="radio"
+            class="btn-check text-primary"
+            [checked]="selectedItem()?.wieghtType === WeightType.GR"
+            disabled
+          />
+          <label class="btn btn-outline-primary" for="detailRadioGr"> g </label>
+
+          <input
+            id="detailRadioKg"
+            type="radio"
+            class="btn-check text-primary"
+            [checked]="selectedItem()?.wieghtType === WeightType.KG"
+            disabled
+          />
+          <label class="btn btn-outline-primary" for="detailRadioKg"> Kg </label>
+        </div>
+        <input
+          type="number"
+          class="form-control border border-primary bg-secondary-subtle shadow-sm text-primary"
+          [value]="selectedItem()?.weight"
+          disabled
+        />
+      </div>
+    </div>
+    }
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.SUBTOTAL' | translate }}
+      </div>
+      <div class="d-flex flex-row gap-2">
+        <div class="input-group shadow-sm">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold"
+            >Bs</span
+          >
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalSubtotalInBS() | number : '1.2-2'"
+            disabled
+          />
+        </div>
+        <div class="input-group shadow-sm">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold"
+            >$</span
+          >
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalSubtotalInUSD() | number : '1.2-2'"
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.TOTAL' | translate }}
+      </div>
+      <div class="d-flex flex-row gap-2">
+        <div class="input-group shadow-sm">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold"
+            >Bs</span
+          >
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalTotalInBS() | number : '1.2-2'"
+            disabled
+          />
+        </div>
+        <div class="input-group shadow-sm">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold"
+            >$</span
+          >
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalTotalInUSD() | number : '1.2-2'"
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row mt-2">
+      <button class="btn btn-primary shadow-sm text-white fw-bold mt-2 w-100" (click)="closeDialog()">
+        <i class="bi bi-check-circle-fill me-1"></i>
+        {{ 'GENERAL.ACCEPT' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
