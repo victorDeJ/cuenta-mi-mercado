@@ -1,0 +1,18 @@
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+
+@each $i in "primary", "secondary", "success", "info", "warning", "danger", "dark" {
+  .btn-outline-#{$i} {
+    --bs-border-color: var(--bs-#{$i});
+  }
+}
+
+
+
+
+

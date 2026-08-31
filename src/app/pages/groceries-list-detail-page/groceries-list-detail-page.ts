@@ -28,22 +28,19 @@ export class GroceriesListDetailPage {
   route = inject(ActivatedRoute);
 
   @ViewChild('itemContent') itemContent!: TemplateRef<any>;
-  showWeightOptions: boolean = false;
-  @ViewChild('confirmDeleteItem') confirmDeleteItem!: TemplateRef<any>;
-  @ViewChild('confirmComplete') confirmComplete!: TemplateRef<any>;
-  @ViewChild('confirmDiscard') confirmDiscard!: TemplateRef<any>;
 
   exchangeRateDate: Temporal.ZonedDateTime = Temporal.Now.zonedDateTimeISO('UTC');
   IVAType = IVAType;
 
   bcvRate = signal<number>(0);
   bcvRateId = signal<string>('');
-  kontigoRate = signal<number>(0); 
+  kontigoRate = signal<number>(0);
   kontigoRateId = signal<string>('');
   WeightType = WeightType;
 
   currentGroceryList = signal<GroceryList | null>(null);
   currency = signal<'USD' | 'BS'>('USD');
+  selectedItem = signal<GroceryItem | null>(null);
 
   activeBcvRate = computed(() => {
     const listRate = this.currentGroceryList()?.bcvRate;
@@ -55,6 +52,35 @@ export class GroceriesListDetailPage {
   }
 
   items = signal<GroceryItem[]>([]);
+
+  selectedItemPrice = computed(() => {
+    const item = this.selectedItem();
+    if (!item) return 0;
+    return this.currency() === 'USD' ? item.price : item.price * this.activeBcvRate();
+  });
+
+  modalSubtotalInUSD = computed(() => {
+    const item = this.selectedItem();
+    if (!item) return 0;
+    let weightMultiplier = 1;
+    if (item.weight > 0) {
+      weightMultiplier = item.wieghtType === WeightType.GR ? item.weight / 1000 : item.weight;
+    }
+    return item.price * item.quantity * weightMultiplier;
+  });
+
+  modalTotalInUSD = computed(() => {
+    const item = this.selectedItem();
+    if (!item) return 0;
+    const baseTotal = this.modalSubtotalInUSD();
+    let ivaMultiplier = 1;
+    if (item.IVAType === IVAType.GENERAL) ivaMultiplier = 1.16;
+    else if (item.IVAType === IVAType.REDUCED) ivaMultiplier = 1.08;
+    return baseTotal * ivaMultiplier;
+  });
+
+  modalSubtotalInBS = computed(() => this.modalSubtotalInUSD() * this.activeBcvRate());
+  modalTotalInBS = computed(() => this.modalTotalInUSD() * this.activeBcvRate());
 
   summarySubtotal = computed(() => {
     return this.items().reduce((acc, item) => {
@@ -103,6 +129,20 @@ export class GroceriesListDetailPage {
         this.loadList(id);
       }
     });
+  }
+
+  showItemContent(index: number) {
+    const item = this.items()[index];
+    if (!item) return;
+    this.selectedItem.set(item);
+    this.dialog.open(this.itemContent, {
+      width: '90%',
+      maxWidth: '500px',
+    });
+  }
+
+  closeDialog() {
+    this.dialog.closeAll();
   }
 
   async loadList(id: string) {

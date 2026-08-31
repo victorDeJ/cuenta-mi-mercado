@@ -1,5 +1,7 @@
 <div class="content-width d-flex flex-column justify-content-center px-2 min-vh-90">
-  <h1 class="mb-4 fw-bold rounded bg-primary-subtle pb-2 pt-1 text-center shadow-sm border border-primary text-primary">
+  <h1
+    class="mb-4 fw-bold rounded bg-primary-subtle pb-2 pt-1 text-center shadow border border-primary text-primary"
+  >
     {{ 'HOME.TITLE' | translate }}
   </h1>
 
@@ -10,83 +12,81 @@
     <div class="btn-group" role="group">
       <input type="radio" class="btn-check" name="language" id="lang-es" autocomplete="off" (click)="useLanguage('es')" checked>
       <label class="btn btn-outline-primary" for="lang-es">ES</label>
-  
+
       <input type="radio" class="btn-check" name="language" id="lang-en" autocomplete="off" (click)="useLanguage('en')">
       <label class="btn btn-outline-primary" for="lang-en">EN</label>
     </div>
   </div> -->
 
-  <hr>
+  <hr />
 
   @if (pendingList()) {
-    <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
-    (click)="navigateToPage('groceries-list')"
-    > 
-      <i class="bi bi-play-circle-fill me-1"></i>
-      {{ 'HOME.CONTINUE_SHOP' | translate }} 
+    <button
+      class="btn btn-primary fw-semibold w-100 mt-2 shadow"
+      (click)="navigateToPage('groceries-list')"
+    >
+      <i class="bi bi-play-fill me-1"></i>
+      {{ 'HOME.CONTINUE_SHOP' | translate }}
     </button>
   }
 
-  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
-  (click)="onRegisterShop()"
-  > 
-    <i class="bi bi-plus-circle-fill me-1"></i>
-    {{ 'HOME.REGISTER_GROCERIES' | translate }} 
+  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow" (click)="onRegisterShop()">
+    <i class="bi bi-plus me-1"></i>
+    {{ 'HOME.REGISTER_GROCERIES' | translate }}
   </button>
 
-  <hr>
+  <hr />
 
-  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
-  (click)="navigateToPage('groceries-list-historical')"
+  <button
+    class="btn btn-primary fw-semibold w-100 mt-2 shadow"
+    (click)="navigateToPage('groceries-list-historical')"
   >
-    <i class="bi bi-file-text-fill me-1"></i>
-    {{ 'HOME.GROCERIES_LIST_HISTORICAL' | translate }} 
+    <i class="bi bi-journal-text me-1"></i>
+    {{ 'HOME.GROCERIES_LIST_HISTORICAL' | translate }}
   </button>
-  <button class="btn btn-primary fw-semibold w-100 mt-2 shadow-sm"
-  (click)="navigateToPage('exchange-rate')"
-  > 
-    <i class="bi bi-currency-exchange me-1"></i>
-    {{ 'HOME.EXCHANGE_RATE' | translate }} 
+  <button
+    class="btn btn-primary fw-semibold w-100 mt-2 shadow"
+    (click)="navigateToPage('exchange-rate')"
+  >
+    <i class="bi bi-coin me-1"></i>
+    {{ 'HOME.EXCHANGE_RATE' | translate }}
   </button>
-
 </div>
 
 <ng-template #pendingListModal>
-  <div id="PendingListContainer" 
-  class="border border-primary bg-primary-subtle rounded p-3 mt-2 shadow-sm overflow-hidden"
+  <div
+    id="PendingListContainer"
+    class="border border-primary bg-primary-subtle rounded p-3 mt-2 shadow overflow-hidden"
   >
     <div class="text-center text-primary fw-bold w-100 position-relative">
       <h3>
         {{ 'HOME.PENDING_SHOP_TITLE' | translate }}
       </h3>
-      <button class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
-      (click)="onCancel()"
-      ></button>
+      <button
+        class="btn btn-primary btn-sm text-white shadow position-absolute top-0 end-0"
+        (click)="onCancel()"
+      >
+        <i class="bi bi-x-lg bi-sm"></i>
+      </button>
     </div>
-    
+
     <div class="py-3 text-center text-primary fw-semibold">
       {{ 'HOME.PENDING_SHOP_MESSAGE' | translate }}
     </div>
 
     <div class="d-flex flex-column gap-2 mt-2">
-      <button class="btn btn-primary shadow-sm text-white fw-bold w-100"
-      (click)="onContinue()"
-      >
-        <i class="bi bi-play-circle-fill me-1"></i>
+      <button class="btn btn-primary shadow text-white fw-bold w-100" (click)="onContinue()">
+        <i class="bi bi-play-fill me-1"></i>
         {{ 'HOME.ACCEPT_AND_CONTINUE' | translate }}
       </button>
 
-      <button class="btn btn-danger shadow-sm text-white fw-bold w-100" 
-      (click)="onDiscard()"
-      >
-        <i class="bi bi-trash-fill me-1"></i>
+      <button class="btn btn-danger shadow text-white fw-bold w-100" (click)="onDiscard()">
+        <i class="bi bi-trash3 me-1"></i>
         {{ 'HOME.DISCARD_SHOP' | translate }}
       </button>
 
-      <button class="btn btn-outline-primary shadow-sm fw-bold w-100" 
-      (click)="onCancel()"
-      >
-        <i class="bi bi-x-circle-fill me-1"></i>
+      <button class="btn btn-info shadow fw-bold w-100" (click)="onCancel()">
+        <i class="bi bi-x"></i>
         {{ 'GENERAL.CANCEL' | translate }}
       </button>
     </div>

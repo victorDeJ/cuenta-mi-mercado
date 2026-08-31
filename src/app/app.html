@@ -1,15 +1,17 @@
-@if(layout.headerTitle()){
-  <div class="d-flex justify-content-center align-items-center vh-10 bg-primary-subtle sticky-top shadow-sm border border-primary pt-3"
-  style="z-index: 1051;"
+@if (layout.headerTitle()) {
+  <div
+    class="d-flex justify-content-center align-items-center vh-10 bg-primary-subtle sticky-top shadow border border-primary pt-3"
+    style="z-index: 1051"
   >
-    @if(layout.getPreviousBreadcrumb()?.id){
-      <button class="btn btn-info  text-white fw-semibold position-absolute start-0 my-0 mx-2 shadow-sm" 
-      (click)="navigateToPage(layout.getPreviousBreadcrumb()?.url ?? '')"
-      > 
-        <i class="bi bi-caret-left-fill"></i>
+    @if (layout.getPreviousBreadcrumb()?.id) {
+      <button
+        class="btn btn-info text-white fw-semibold position-absolute start-0 my-0 mx-2 shadow"
+        (click)="navigateToPage(layout.getPreviousBreadcrumb()?.url ?? '')"
+      >
+        <i class="bi bi-caret-left-fill bi-sm"></i>
       </button>
     }
-    <h1 class="m-0 text-primary fw-bold ">{{ layout.headerTitle() | translate }}</h1>
+    <h1 class="m-0 text-primary fw-bold">{{ layout.headerTitle() | translate }}</h1>
   </div>
 }
 <div class="d-flex justify-content-center align-items-start min-vh-90">
@@ -17,12 +19,14 @@
 </div>
 
 @if (layout.isLoading()) {
-  <div class="position-fixed top-0 start-0  w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50" style="z-index: 1050;">
+  <div
+    class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50"
+    style="z-index: 1050"
+  >
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">
-        {{ 'GENERAL.LOADING' | translate}}
+        {{ 'GENERAL.LOADING' | translate }}
       </span>
     </div>
   </div>
 }
-

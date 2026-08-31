@@ -3,7 +3,7 @@
     "DATE": "Date",
     "NAME": "Name",
     "WEIGHT": "Weight",
-    "WEIGHT_BY_KG": "Weight x KG",
+    "WEIGHT_BY_KG": "Weight x Kg",
     "PRICE": "Price",
     "BASE_PRICE": "Base price",
     "DESCRIPTION": "Descripción",
@@ -66,7 +66,9 @@
     "CONFIRM_COMPLETE_MESSAGE": "Are you sure you want to complete the shopping? Once finalized, it cannot be modified.",
     "DISCARD_SHOP": "Discard shop",
     "CONFIRM_DISCARD_TITLE": "Discard shop",
-    "CONFIRM_DISCARD_MESSAGE": "Are you sure you want to discard this shop? All items will be deleted and the record will not be saved."
+    "CONFIRM_DISCARD_MESSAGE": "Are you sure you want to discard this shop? All items will be deleted and the record will not be saved.",
+    "HIGH_MEASURE": "Kg",
+    "LOW_MEASURE": "g"
   },
   "GROCERIES_LIST_HISTORICAL": {
     "BREADCRUMB_NAME": "Groceries List Historical",

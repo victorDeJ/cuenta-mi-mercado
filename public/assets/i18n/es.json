@@ -3,7 +3,7 @@
     "DATE": "Fecha",
     "NAME": "Nombre",
     "WEIGHT": "Peso",
-    "WEIGHT_BY_KG": "PRecio x KG",
+    "WEIGHT_BY_KG": "PRecio x Kg",
     "PRICE": "Precio",
     "BASE_PRICE": "Precio base",
     "DESCRIPTION": "Descripción",
@@ -66,7 +66,9 @@
     "CONFIRM_COMPLETE_MESSAGE": "¿Estás seguro de que deseas completar el mercado? Una vez finalizado no se podrá modificar.",
     "DISCARD_SHOP": "Descartar",
     "CONFIRM_DISCARD_TITLE": "Descartar mercado",
-    "CONFIRM_DISCARD_MESSAGE": "¿Estás seguro de que deseas descartar este mercado? Se borrarán todos los productos y no se guardará el registro."
+    "CONFIRM_DISCARD_MESSAGE": "¿Estás seguro de que deseas descartar este mercado? Se borrarán todos los productos y no se guardará el registro.",
+    "HIGH_MEASURE":"Kg",
+    "LOW_MEASURE":"g"
   },
   "GROCERIES_LIST_HISTORICAL": {
     "BREADCRUMB_NAME": "Histórico",

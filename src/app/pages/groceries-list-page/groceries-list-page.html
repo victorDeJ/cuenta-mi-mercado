@@ -61,7 +61,7 @@
     <div class="btn-group me-2 shadow-sm" role="group">
       <button
         type="button"
-        class="btn btn-sm fw-bold px-3 py-1"
+        class="btn btn-sm fw-bold px-3 py-2"
         [ngClass]="currency() === 'USD' ? 'btn-info text-white' : 'btn-outline-info'"
         (click)="toggleCurrency('USD')"
       >
@@ -69,7 +69,7 @@
       </button>
       <button
         type="button"
-        class="btn btn-sm fw-bold px-3 py-1"
+        class="btn btn-sm fw-bold px-3 py-2"
         [ngClass]="currency() === 'BS' ? 'btn-info text-white' : 'btn-outline-info'"
         (click)="toggleCurrency('BS')"
       >
@@ -78,9 +78,11 @@
     </div>
     <!-- <button class="btn btn-info bi bi-camera-fill text-white shadow-sm"></button> -->
     <button
-      class="btn btn-info bi bi-plus-circle-fill text-white shadow-sm ms-2"
+      class="btn btn-info text-white shadow-sm ms-2"
       (click)="showItemContent(-1); $event.stopPropagation()"
-    ></button>
+    >
+      <i class="bi bi-plus"></i>
+    </button>
   </div>
 
   <div
@@ -242,9 +244,11 @@
         {{ 'GENERAL.PRODUCT' | translate }}
       </h3>
       <button
-        class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+        class="btn btn-primary btn-sm text-white shadow-sm position-absolute top-0 end-0"
         (click)="closeDialog()"
-      ></button>
+      >
+        <i class="bi bi-x-lg bi-sm"></i>
+      </button>
     </div>
 
     <div>
@@ -291,41 +295,20 @@
       </div>
       <div class="col-6 d-flex flex-row">
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-          <input
-            id="radioGeneral"
-            type="radio"
-            class="btn-check text-primary"
-            formControlName="IVAType"
-            [value]="IVAType.GENERAL"
-            autocomplete="off"
-          />
-          <label class="btn btn-outline-primary" for="radioGeneral">
-            {{ IVAType.GENERAL }}
-          </label>
 
-          <input
-            id="radioReduced"
-            type="radio"
-            class="btn-check text-primary"
-            formControlName="IVAType"
-            [value]="IVAType.REDUCED"
-            autocomplete="off"
-          />
-          <label class="btn btn-outline-primary" for="radioReduced">
-            {{ IVAType.REDUCED }}
-          </label>
-
-          <input
-            id="radioExcempt"
-            type="radio"
-            class="btn-check text-primary"
-            formControlName="IVAType"
-            [value]="IVAType.EXEMPT"
-            autocomplete="off"
-          />
-          <label class="btn btn-outline-primary" for="radioExcempt">
-            {{ IVAType.EXEMPT }}
-          </label>
+          @for(item of [ IVAType.GENERAL,IVAType.REDUCED,IVAType.EXEMPT ]; track  item){
+            <input
+              id="radio{{ item }}"
+              type="radio"
+              class="btn-check text-primary"
+              formControlName="IVAType"
+              [value]="item"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary border border-primary fw-bold" for="radio{{ item }}">
+              {{ item }}
+            </label>
+          }
         </div>
       </div>
       <button
@@ -337,11 +320,11 @@
         (click)="showWeightOptions = !showWeightOptions"
       >
         @if(!showWeightOptions){
+          <i class="bi bi-plus"></i>
         {{ 'GENERAL.WEIGHT' | translate }}
-        <i class="bi bi-plus-circle-fill"></i>
         } @else{
+          <i class="bi bi-x"></i>
         {{ 'GENERAL.WEIGHT' | translate }}
-        <i class="bi bi-x-circle-fill"></i>
         }
       </button>
     </div>
@@ -361,7 +344,7 @@
             [value]="WeightType.GR"
             autocomplete="off"
           />
-          <label class="btn btn-outline-primary" for="radioGr"> g </label>
+          <label class="btn btn-outline-primary fw-bold" for="radioGr"> {{ "GROCERIES_LIST.LOW_MEASURE" | translate }} </label>
 
           <input
             id="radioKg"
@@ -371,7 +354,7 @@
             [value]="WeightType.KG"
             autocomplete="off"
           />
-          <label class="btn btn-outline-primary" for="radioKg"> Kg </label>
+          <label class="btn btn-outline-primary fw-bold" for="radioKg"> {{ "GROCERIES_LIST.HIGH_MEASURE" | translate }} </label>
         </div>
         <input
           type="number"
@@ -448,7 +431,7 @@
         class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50"
         (click)="onSubmitItem()"
       >
-        <i class="bi bi-check-circle-fill"></i>
+        <i class="bi bi-check"></i>
         {{ 'GENERAL.ACCEPT' | translate }}
       </button>
 
@@ -462,7 +445,7 @@
       </button>
       } @else {
       <button class="btn btn-danger shadow-sm text-white fw-bold mt-2 w-50" (click)="closeDialog()">
-        <i class="bi bi-x-circle-fill"></i>
+        <i class="bi bi-x"></i>
         {{ 'GENERAL.CANCEL' | translate }}
       </button>
       }
@@ -481,9 +464,11 @@
       </h3>
 
       <button
-        class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+        class="btn btn-primary btn-sm text-white shadow-sm position-absolute top-0 end-0"
         (click)="closeConfirmDeleteItem()"
-      ></button>
+      >
+        <i class="bi bi-x"></i>
+      </button>
     </div>
 
     <div>
@@ -497,11 +482,11 @@
         class="btn btn-primary shadow-sm text-white fw-bold mt-2 me-2 w-50"
         (click)="onDeleteItem()"
       >
-        <i class="bi bi-check-circle-fill"></i>
+        <i class="bi bi-check"></i>
         {{ 'GENERAL.ACCEPT' | translate }}
       </button>
       <button class="btn btn-danger shadow-sm text-white fw-bold mt-2 w-50" (click)="closeDialog()">
-        <i class="bi bi-x-circle-fill"></i>
+        <i class="bi bi-x"></i>
         {{ 'GENERAL.CANCEL' | translate }}
       </button>
     </div>
@@ -517,9 +502,11 @@
         {{ 'GROCERIES_LIST.CONFIRM_COMPLETE_TITLE' | translate }}
       </h3>
       <button
-        class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+        class="btn btn-primary btn-sm text-white shadow-sm position-absolute top-0 end-0"
         (click)="closeDialog()"
-      ></button>
+      >
+        <i class="bi bi-x"></i>
+      </button>
     </div>
 
     <div class="py-3 px-2">
@@ -530,11 +517,11 @@
 
     <div class="d-flex flex-row gap-2 mt-2">
       <button class="btn btn-primary shadow-sm text-white fw-bold w-50" (click)="onCompleteShop()">
-        <i class="bi bi-check-circle-fill"></i>
+        <i class="bi bi-check"></i>
         {{ 'GENERAL.ACCEPT' | translate }}
       </button>
       <button class="btn btn-danger shadow-sm text-white fw-bold w-50" (click)="closeDialog()">
-        <i class="bi bi-x-circle-fill"></i>
+        <i class="bi bi-x"></i>
         {{ 'GENERAL.CANCEL' | translate }}
       </button>
     </div>
@@ -551,9 +538,11 @@
         {{ 'GROCERIES_LIST.CONFIRM_DISCARD_TITLE' | translate }}
       </h3>
       <button
-        class="btn btn-primary btn-sm bi bi-x-circle-fill text-white shadow-sm position-absolute top-0 end-0"
+        class="btn btn-primary btn-sm text-white shadow-sm position-absolute top-0 end-0"
         (click)="closeDialog()"
-      ></button>
+      >
+        <i class="bi bi-x"></i>
+      </button>
     </div>
 
     <div class="py-3 px-2">
@@ -568,7 +557,7 @@
         {{ 'GENERAL.ACCEPT' | translate }}
       </button>
       <button class="btn btn-primary shadow-sm text-white fw-bold w-50" (click)="closeDialog()">
-        <i class="bi bi-x-circle-fill"></i>
+        <i class="bi bi-x"></i>
         {{ 'GENERAL.CANCEL' | translate }}
       </button>
     </div>

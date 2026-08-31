@@ -1,7 +1,7 @@
 // Custom Bootstrap variables
 // You can find all available variables in node_modules/bootstrap/scss/_variables.scss
 
-$primary: #448058; // Example: a nice purple
+$primary: #538d45;
 $secondary: #5CE370;
 $success: #3eb623;
 $info: #0984e3;
@@ -17,3 +17,7 @@ $body-color: #2d3436;
 $border-radius: 0.5rem;
 $border-radius-lg: 0.8rem;
 $border-radius-sm: 0.3rem;
+
+$border-width: 2px;
+
+$min-contrast-ratio: 3.5;
