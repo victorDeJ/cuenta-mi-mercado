@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { Layout } from '../../core/services/layout/layout';
 import { IBreadcrumb } from '../../core/services/layout/interfaces/breadcrumb.interface';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgClass, DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { NgClass, DatePipe, DecimalPipe } from '@angular/common';
 import { Database } from '../../core/services/database/database';
 import { Collection } from '../../core/services/database/enums/collections';
 import { GroceryList } from '../../core/services/database/collections/grocery-list';
+import { ExcelExportService } from '../../core/services/excel-export/excel-export.service';
 
 @Component({
   selector: 'app-groceries-list-historical-page',
@@ -18,6 +19,7 @@ export class GroceriesListHistoricalPage {
   layout = inject(Layout);
   db = inject(Database);
   router = inject(Router);
+  excelExportService = inject(ExcelExportService);
 
   groceryLists = signal<GroceryList[]>([]);
 
@@ -35,6 +37,7 @@ export class GroceriesListHistoricalPage {
   }
 
   async loadGroceryLists() {
+    this.layout.setToLoading();
     try {
       const data = await this.db.getData(Collection.GROCERY_LIST, {
         selector: {
@@ -48,10 +51,18 @@ export class GroceriesListHistoricalPage {
       this.groceryLists.set(sortedLists);
     } catch (error) {
       console.error('Error loading grocery lists:', error);
+    } finally {
+      this.layout.setToUnloading();
     }
   }
 
   openList(id: string) {
     this.router.navigateByUrl(`/groceries-list-detail/${id}`);
+  }
+
+  exportExcel() {
+    const lists = this.groceryLists();
+    if (lists.length === 0) return;
+    this.excelExportService.exportGroceryLists(lists);
   }
 }

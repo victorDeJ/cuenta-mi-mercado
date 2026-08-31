@@ -75,6 +75,7 @@
     "TITLE": "Histórico",
     "DELETE_ITEM": "Eliminar",
     "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?",
-    "EMPTY_LIST": "No hay mercados registrados"
+    "EMPTY_LIST": "No hay mercados registrados",
+    "EXPORT_EXCEL": "Exportar Excel"
   }
 }
