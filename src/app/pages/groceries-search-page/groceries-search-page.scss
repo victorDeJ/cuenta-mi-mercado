@@ -11,3 +11,12 @@
   min-height: 220px;
   max-height: calc(100vh - 240px);
 }
+
+.search-input,
+input.text-primary {
+  &::placeholder {
+    color: var(--bs-primary) !important;
+    opacity: 0.7;
+  }
+}
+

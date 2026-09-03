@@ -72,3 +72,9 @@ input{
   overscroll-behavior: contain;
 }
 
+input.text-primary::placeholder,
+.form-control.text-primary::placeholder {
+  color: var(--bs-primary) !important;
+  opacity: 0.7;
+}
+
