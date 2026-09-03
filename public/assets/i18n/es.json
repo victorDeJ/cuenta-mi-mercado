@@ -77,6 +77,8 @@
     "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?",
     "EMPTY_LIST": "No hay mercados registrados",
     "EXPORT_EXCEL": "Exportar Excel",
+    "CONFIRM_EXPORT_TITLE": "Exportar a Excel",
+    "CONFIRM_EXPORT_MESSAGE": "¿Estás seguro de que deseas generar el archivo Excel con el histórico de compras?",
     "SEARCH": "Buscar"
   },
   "GROCERIES_SEARCH": {

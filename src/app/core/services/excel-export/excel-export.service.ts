@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { FileOpener } from '@capacitor-community/file-opener';
 import { GroceryList } from '../database/collections/grocery-list';
 import { WeightType } from '../database/enums/weight-type';
 
@@ -7,7 +11,33 @@ import { WeightType } from '../database/enums/weight-type';
   providedIn: 'root',
 })
 export class ExcelExportService {
-  exportGroceryLists(lists: GroceryList[], fileNamePrefix = 'historial_mercados'): void {
+  private listenerInitialized = false;
+
+  constructor() {
+    this.initNotificationListener();
+  }
+
+  private initNotificationListener(): void {
+    if (Capacitor.isNativePlatform() && !this.listenerInitialized) {
+      this.listenerInitialized = true;
+      LocalNotifications.addListener('localNotificationActionPerformed', async (action) => {
+        const fileUri = action.notification.extra?.fileUri;
+        if (fileUri) {
+          try {
+            await FileOpener.open({
+              filePath: fileUri,
+              contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              openWithDefault: false,
+            });
+          } catch (error) {
+            console.error('Error opening file from notification:', error);
+          }
+        }
+      });
+    }
+  }
+
+  async exportGroceryLists(lists: GroceryList[], fileNamePrefix = 'historial_mercados'): Promise<void> {
     if (!lists || lists.length === 0) return;
 
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
@@ -166,8 +196,66 @@ export class ExcelExportService {
       XLSX.utils.book_append_sheet(workbook, sheet, sheetName);
     });
 
-    // 3. Descargar archivo
+    // 3. Descargar o guardar archivo
     const today = new Date().toISOString().slice(0, 10);
-    XLSX.writeFile(workbook, `${fileNamePrefix}_${today}.xlsx`);
+    const fileName = `${fileNamePrefix}_${today}.xlsx`;
+
+    if (!Capacitor.isNativePlatform()) {
+      // 3a. Plataforma Web
+      XLSX.writeFile(workbook, fileName);
+    } else {
+      // 3b. Dispositivo Móvil
+      try {
+        const base64Data = XLSX.write(workbook, { bookType: 'xlsx', type: 'base64' });
+
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Documents,
+          recursive: true,
+        });
+
+        // Notificación local
+        try {
+          const permStatus = await LocalNotifications.checkPermissions();
+          if (permStatus.display !== 'granted') {
+            await LocalNotifications.requestPermissions();
+          }
+
+          const notificationId = Math.floor(Math.random() * 1000000);
+          await LocalNotifications.schedule({
+            notifications: [
+              {
+                id: notificationId,
+                title: 'Excel generado con éxito',
+                body: `Toca aquí para abrir o compartir ${fileName}`,
+                extra: {
+                  fileUri: savedFile.uri,
+                  fileName: fileName,
+                },
+                schedule: { at: new Date(Date.now() + 100) },
+              },
+            ],
+          });
+        } catch (notifErr) {
+          console.warn('Notification error or permission denied:', notifErr);
+        }
+
+        // Abrir el archivo directamente con la app de hojas de cálculo del sistema
+        try {
+          await FileOpener.open({
+            filePath: savedFile.uri,
+            contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            openWithDefault: false,
+          });
+        } catch (openErr) {
+          console.log('Error opening file or no viewer app installed:', openErr);
+        }
+      } catch (error) {
+        console.error('Error saving excel on mobile:', error);
+        XLSX.writeFile(workbook, fileName);
+      }
+    }
   }
 }
+

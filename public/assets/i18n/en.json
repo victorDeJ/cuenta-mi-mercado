@@ -77,6 +77,8 @@
     "CONFIRM_DELETE_ITEM": "Are you sure you want to delete this item?",
     "EMPTY_LIST": "No grocery lists registered",
     "EXPORT_EXCEL": "Export Excel",
+    "CONFIRM_EXPORT_TITLE": "Export to Excel",
+    "CONFIRM_EXPORT_MESSAGE": "Are you sure you want to generate the Excel file with the shopping historical?",
     "SEARCH": "Search"
   },
   "GROCERIES_SEARCH": {

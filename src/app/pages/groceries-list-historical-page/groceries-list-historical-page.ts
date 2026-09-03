@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Layout } from '../../core/services/layout/layout';
 import { IBreadcrumb } from '../../core/services/layout/interfaces/breadcrumb.interface';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgClass, DatePipe, DecimalPipe } from '@angular/common';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { Database } from '../../core/services/database/database';
 import { Collection } from '../../core/services/database/enums/collections';
 import { GroceryList } from '../../core/services/database/collections/grocery-list';
@@ -11,7 +12,7 @@ import { ExcelExportService } from '../../core/services/excel-export/excel-expor
 
 @Component({
   selector: 'app-groceries-list-historical-page',
-  imports: [TranslateModule, NgClass, DatePipe, DecimalPipe],
+  imports: [TranslateModule, DialogModule, NgClass, DatePipe, DecimalPipe],
   templateUrl: './groceries-list-historical-page.html',
   styleUrl: './groceries-list-historical-page.scss',
 })
@@ -19,7 +20,10 @@ export class GroceriesListHistoricalPage {
   layout = inject(Layout);
   db = inject(Database);
   router = inject(Router);
+  dialog = inject(Dialog);
   excelExportService = inject(ExcelExportService);
+
+  @ViewChild('confirmExport') confirmExport!: TemplateRef<any>;
 
   groceryLists = signal<GroceryList[]>([]);
 
@@ -64,9 +68,28 @@ export class GroceriesListHistoricalPage {
     this.router.navigateByUrl('/groceries-search');
   }
 
-  exportExcel() {
+  showConfirmExport() {
+    this.dialog.open(this.confirmExport, {
+      width: '90%',
+      maxWidth: '500px',
+    });
+  }
+
+  closeDialog() {
+    this.dialog.closeAll();
+  }
+
+  async onConfirmExport() {
+    this.closeDialog();
     const lists = this.groceryLists();
     if (lists.length === 0) return;
-    this.excelExportService.exportGroceryLists(lists);
+    this.layout.setToLoading();
+    try {
+      await this.excelExportService.exportGroceryLists(lists);
+    } catch (error) {
+      console.error('Error exporting excel:', error);
+    } finally {
+      this.layout.setToUnloading();
+    }
   }
 }
