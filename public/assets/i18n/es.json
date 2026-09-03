@@ -76,6 +76,23 @@
     "DELETE_ITEM": "Eliminar",
     "CONFIRM_DELETE_ITEM": "¿Estás seguro que quieres eliminar este producto?",
     "EMPTY_LIST": "No hay mercados registrados",
-    "EXPORT_EXCEL": "Exportar Excel"
+    "EXPORT_EXCEL": "Exportar Excel",
+    "SEARCH": "Buscar"
+  },
+  "GROCERIES_SEARCH": {
+    "BREADCRUMB_NAME": "Búsqueda de productos",
+    "TITLE": "Buscar productos",
+    "PLACEHOLDER": "Buscar producto...",
+    "NAME": "Nombre",
+    "PRICE": "Precio",
+    "MARKET_DATE": "Fecha de mercado",
+    "MARKET_INFO": "Información del mercado",
+    "MARKET_DESCRIPTION": "Descripción del mercado",
+    "BCV_RATE": "Tasa BCV",
+    "KONTIGO_RATE": "Tasa Kontigo",
+    "CLOSE": "Cerrar",
+    "VIEW_MARKET": "Más detalles",
+    "NO_RESULTS": "No se encontraron productos coincidentes",
+    "EMPTY_SEARCH": "Escribe el nombre de un producto para buscar"
   }
 }

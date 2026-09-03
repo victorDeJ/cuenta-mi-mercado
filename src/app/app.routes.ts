@@ -4,6 +4,7 @@ import { ExchangeRatePage } from './pages/exchange-rate-page/exchange-rate-page'
 import { GroceriesListPage } from './pages/groceries-list-page/groceries-list-page';
 import { GroceriesListHistoricalPage } from './pages/groceries-list-historical-page/groceries-list-historical-page';
 import { GroceriesListDetailPage } from './pages/groceries-list-detail-page/groceries-list-detail-page';
+import { GroceriesSearchPage } from './pages/groceries-search-page/groceries-search-page';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,10 @@ export const routes: Routes = [
   {
     path: 'groceries-list-detail/:id',
     component: GroceriesListDetailPage
+  },
+  {
+    path: 'groceries-search',
+    component: GroceriesSearchPage
   }
 ];
 

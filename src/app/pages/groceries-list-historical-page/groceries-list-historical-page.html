@@ -41,6 +41,16 @@
     </div>
   </div>
 
+  <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 1040;">
+    <button
+      class="btn btn-primary text-white shadow fw-semibold"
+      (click)="openSearch()"
+    >
+      <i class="bi bi-search me-1"></i>
+      {{ 'GROCERIES_LIST_HISTORICAL.SEARCH' | translate }}
+    </button>
+  </div>
+
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1040;">
     <button
       class="btn btn-primary text-white shadow fw-semibold"

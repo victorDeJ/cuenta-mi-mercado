@@ -76,6 +76,23 @@
     "DELETE_ITEM": "Delete item",
     "CONFIRM_DELETE_ITEM": "Are you sure you want to delete this item?",
     "EMPTY_LIST": "No grocery lists registered",
-    "EXPORT_EXCEL": "Export Excel"
+    "EXPORT_EXCEL": "Export Excel",
+    "SEARCH": "Search"
+  },
+  "GROCERIES_SEARCH": {
+    "BREADCRUMB_NAME": "Search Products",
+    "TITLE": "Search Products",
+    "PLACEHOLDER": "Search product...",
+    "NAME": "Name",
+    "PRICE": "Price",
+    "MARKET_DATE": "Market Date",
+    "MARKET_INFO": "Market Information",
+    "MARKET_DESCRIPTION": "Market Description",
+    "BCV_RATE": "BCV Rate",
+    "KONTIGO_RATE": "Kontigo Rate",
+    "CLOSE": "Close",
+    "VIEW_MARKET": "More details",
+    "NO_RESULTS": "No matching products found",
+    "EMPTY_SEARCH": "Type a product name to search"
   }
 }

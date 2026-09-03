@@ -48,5 +48,27 @@ input{
 // Ensure overflow-y-auto always shows scrollbar if needed
 .overflow-y-auto {
   scrollbar-width: thin;
-  scrollbar-color: rgba($primary, 0.2) transparent;
+  scrollbar-color: rgba($primary, 0.4) transparent;
 }
+
+// CDK Dialog responsive height and scrolling
+.cdk-overlay-pane {
+  max-height: 90vh;
+  max-height: 90dvh;
+}
+
+.cdk-dialog-container {
+  max-height: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#itemContentContainer {
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+

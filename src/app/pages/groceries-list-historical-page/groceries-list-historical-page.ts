@@ -60,6 +60,10 @@ export class GroceriesListHistoricalPage {
     this.router.navigateByUrl(`/groceries-list-detail/${id}`);
   }
 
+  openSearch() {
+    this.router.navigateByUrl('/groceries-search');
+  }
+
   exportExcel() {
     const lists = this.groceryLists();
     if (lists.length === 0) return;

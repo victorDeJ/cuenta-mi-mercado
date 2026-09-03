@@ -273,38 +273,21 @@
       </div>
       <div class="col-12 d-flex flex-row">
         <div class="btn-group w-100" role="group">
-          <input
-            id="detailRadioGeneral"
-            type="radio"
-            class="btn-check text-primary"
-            [checked]="selectedItem()?.IVAType === IVAType.GENERAL"
-            disabled
-          />
-          <label class="btn btn-outline-primary" for="detailRadioGeneral">
-            {{ IVAType.GENERAL }}
-          </label>
-
-          <input
-            id="detailRadioReduced"
-            type="radio"
-            class="btn-check text-primary"
-            [checked]="selectedItem()?.IVAType === IVAType.REDUCED"
-            disabled
-          />
-          <label class="btn btn-outline-primary" for="detailRadioReduced">
-            {{ IVAType.REDUCED }}
-          </label>
-
-          <input
-            id="detailRadioExcempt"
-            type="radio"
-            class="btn-check text-primary"
-            [checked]="selectedItem()?.IVAType === IVAType.EXEMPT"
-            disabled
-          />
-          <label class="btn btn-outline-primary" for="detailRadioExcempt">
-            {{ IVAType.EXEMPT }}
-          </label>
+          @for(type of [ IVAType.GENERAL,IVAType.REDUCED,IVAType.EXEMPT ]; track  type){
+            <input
+              [id]="'detailRadio' + type"
+              type="radio"
+              class="btn-check text-primary"
+              [checked]="selectedItem()?.IVAType === type"
+              disabled
+            />
+            <label class="btn btn-outline-primary" [for]="'detailRadio' + type">
+              {{ type }}IVAType.REDUCED
+              @if( type === IVAType.GENERAL){ 16% }
+              @if( type === IVAType.REDUCED){ 8% }
+              @if( type === IVAType.EXEMPT){ 0% }
+            </label>
+          }
         </div>
       </div>
     </div>

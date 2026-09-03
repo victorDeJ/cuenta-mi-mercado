@@ -1,0 +1,338 @@
+<div class="w-100 min-vh-90 content-width justify-content-center align-items-top p-2 pb-4">
+  <!-- Search Input Bar -->
+  <div class="border border-primary bg-primary-subtle rounded p-2 mb-3 shadow">
+    <div class="input-group shadow">
+      <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">
+        <i class="bi bi-search"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border border-primary bg-secondary-subtle text-primary fw-semibold"
+        [placeholder]="'GROCERIES_SEARCH.PLACEHOLDER' | translate"
+        [value]="searchTerm()"
+        (input)="onSearchInput($event)"
+        autofocus
+      />
+      @if (searchTerm()) {
+        <button
+          class="btn btn-outline-primary border-primary bg-secondary-subtle text-primary"
+          type="button"
+          (click)="clearSearch()"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Results List Container -->
+  <div
+    id="GroceriesSearchResults"
+    class="d-flex flex-column border border-primary bg-primary-subtle rounded p-2 shadow overflow-hidden h-100 position-relative"
+  >
+    <!-- Table Headers: Nombre, Precio, Fecha de mercado -->
+    <div class="d-flex flex-row w-100 px-2 pb-1">
+      <div class="col-5 text-primary fw-bold px-2">
+        {{ 'GROCERIES_SEARCH.NAME' | translate }}
+      </div>
+      <div class="col-3 text-primary text-end fw-bold px-2">
+        {{ 'GROCERIES_SEARCH.PRICE' | translate }}
+      </div>
+      <div class="col-4 text-primary text-end fw-bold px-2">
+        {{ 'GROCERIES_SEARCH.MARKET_DATE' | translate }}
+      </div>
+    </div>
+
+    <!-- Items or Spinner -->
+    <div class="d-flex flex-column overflow-y-auto border border-primary rounded p-2 search-list-container position-relative">
+      @if (isSearching()) {
+        <div class="d-flex flex-column justify-content-center align-items-center py-5">
+          <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">{{ 'GENERAL.LOADING' | translate }}</span>
+          </div>
+        </div>
+      } @else {
+        @for (item of filteredProducts(); track item.id + item.marketId) {
+          <div
+            class="item-btn d-flex flex-row bg-primary-subtle border border-primary rounded p-2 shadow text-primary fw-semibold bg-secondary-subtle position-relative"
+            (click)="openProductDetail(item)"
+            [ngClass]="{
+              'mt-2': !$first,
+            }"
+          >
+            <!-- Nombre -->
+            <span class="col-5 text-start text-truncate pe-1">
+              {{ item.description }}
+            </span>
+            <!-- Precio y letra del IVA -->
+            <span class="col-3 text-end px-1 text-truncate">
+              $ {{ (item.totalInDollars || item.price) | number: '1.2-2' }} {{ item.IVAType }}
+            </span>
+            <!-- Fecha de mercado -->
+            <span class="col-4 text-end ps-1">
+              {{ item.marketCreatedAt | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+        } @empty {
+          <div class="text-center text-primary p-4">
+            @if (hasSearched()) {
+              {{ 'GROCERIES_SEARCH.NO_RESULTS' | translate }}
+            } @else {
+              {{ 'GROCERIES_SEARCH.EMPTY_SEARCH' | translate }}
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Product Detail Modal -->
+<ng-template #itemContent>
+  <div
+    id="itemContentContainer"
+    class="border border-primary bg-primary-subtle rounded p-3 shadow overflow-y-auto"
+    style="max-height: 85vh; max-height: 85dvh;"
+  >
+    <div class="text-center text-primary fw-bold w-100 position-relative">
+      <h3>
+        {{ 'GENERAL.PRODUCT' | translate }}
+      </h3>
+      <button
+        class="btn btn-primary text-white shadow position-absolute top-0 end-0"
+        (click)="closeDialog()"
+      >
+        <i class="bi bi-x-lg bi-sm"></i>
+      </button>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.NAME' | translate }}
+      </div>
+      <input
+        type="text"
+        class="form-control border border-primary bg-secondary-subtle shadow text-primary"
+        [value]="selectedItem()?.description"
+        disabled
+      />
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.BASE_PRICE' | translate }}
+      </div>
+      <div class="input-group shadow">
+        <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">
+          $
+        </span>
+        <input
+          type="text"
+          class="form-control border border-primary bg-secondary-subtle text-primary"
+          [value]="selectedItemPrice() | number: '1.2-2'"
+          disabled
+        />
+      </div>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.QUANTITY' | translate }}
+      </div>
+      <input
+        type="number"
+        class="form-control border border-primary bg-secondary-subtle shadow text-primary"
+        [value]="selectedItem()?.quantity"
+        disabled
+      />
+    </div>
+
+    <div class="d-flex flex-row flex-wrap">
+      <div class="col-12 text-primary fw-bold">
+        {{ 'GROCERIES_LIST.IVA_TYPE' | translate }}
+      </div>
+      <div class="col-12 d-flex flex-row">
+        <div class="btn-group w-100" role="group">
+          @for (type of [IVAType.GENERAL, IVAType.REDUCED, IVAType.EXEMPT]; track type) {
+            <input
+              [id]="'detailRadio' + type"
+              type="radio"
+              class="btn-check text-primary"
+              [checked]="selectedItem()?.IVAType === type"
+              disabled
+            />
+            <label class="btn btn-outline-primary" [for]="'detailRadio' + type">
+              {{ type }}
+              @if (type === IVAType.GENERAL) { 16% }
+              @if (type === IVAType.REDUCED) { 8% }
+              @if (type === IVAType.EXEMPT) { 0% }
+            </label>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if ((selectedItem()?.weight ?? 0) > 0) {
+      <div>
+        <div class="col-6 text-primary fw-bold">
+          {{ 'GENERAL.WEIGHT' | translate }}
+        </div>
+        <div class="d-flex flex-row">
+          <div class="btn-group me-2" role="group">
+            <input
+              id="detailRadioGr"
+              type="radio"
+              class="btn-check text-primary"
+              [checked]="selectedItem()?.wieghtType === WeightType.GR"
+              disabled
+            />
+            <label class="btn btn-outline-primary" for="detailRadioGr"> g </label>
+
+            <input
+              id="detailRadioKg"
+              type="radio"
+              class="btn-check text-primary"
+              [checked]="selectedItem()?.wieghtType === WeightType.KG"
+              disabled
+            />
+            <label class="btn btn-outline-primary" for="detailRadioKg"> Kg </label>
+          </div>
+          <input
+            type="number"
+            class="form-control border border-primary bg-secondary-subtle shadow text-primary"
+            [value]="selectedItem()?.weight"
+            disabled
+          />
+        </div>
+      </div>
+    }
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.SUBTOTAL' | translate }}
+      </div>
+      <div class="d-flex flex-row gap-2">
+        <div class="input-group shadow">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">Bs</span>
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalSubtotalInBS() | number: '1.2-2'"
+            disabled
+          />
+        </div>
+        <div class="input-group shadow">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">$</span>
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalSubtotalInUSD() | number: '1.2-2'"
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col-6 text-primary fw-bold">
+        {{ 'GENERAL.TOTAL' | translate }}
+      </div>
+      <div class="d-flex flex-row gap-2">
+        <div class="input-group shadow">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">Bs</span>
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalTotalInBS() | number: '1.2-2'"
+            disabled
+          />
+        </div>
+        <div class="input-group shadow">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">$</span>
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="modalTotalInUSD() | number: '1.2-2'"
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Separador e Información del mercado -->
+    <hr class="border-primary my-3" />
+    <div class="text-primary fw-bold text-center mb-2 fs-5">
+      {{ 'GROCERIES_SEARCH.MARKET_INFO' | translate }}
+    </div>
+
+    <!-- Fecha del mercado -->
+    <div>
+      <div class="col-12 text-primary fw-bold">
+        {{ 'GROCERIES_SEARCH.MARKET_DATE' | translate }}
+      </div>
+      <input
+        type="text"
+        class="form-control border border-primary bg-secondary-subtle shadow text-primary"
+        [value]="selectedItem()?.marketCreatedAt | date: 'dd/MM/yyyy HH:mm'"
+        disabled
+      />
+    </div>
+
+    <!-- Descripción del mercado -->
+    <div class="mt-2">
+      <div class="col-12 text-primary fw-bold">
+        {{ 'GROCERIES_SEARCH.MARKET_DESCRIPTION' | translate }}
+      </div>
+      <input
+        type="text"
+        class="form-control border border-primary bg-secondary-subtle shadow text-primary"
+        [value]="selectedItem()?.marketDescription || '-'"
+        disabled
+      />
+    </div>
+
+    <!-- Tasas de cambio -->
+    <div class="d-flex flex-row w-100 mt-2 gap-2">
+      <div class="col-6">
+        <div class="text-primary fw-bold">
+          {{ 'GROCERIES_SEARCH.BCV_RATE' | translate }}
+        </div>
+        <div class="input-group shadow">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">Bs</span>
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="selectedItem()?.bcvRate | number: '1.2-2'"
+            disabled
+          />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="text-primary fw-bold">
+          {{ 'GROCERIES_SEARCH.KONTIGO_RATE' | translate }}
+        </div>
+        <div class="input-group shadow">
+          <span class="input-group-text border-primary bg-secondary-subtle text-primary fw-bold">Bs</span>
+          <input
+            type="text"
+            class="form-control border border-primary bg-secondary-subtle text-primary"
+            [value]="selectedItem()?.kontigoRate | number: '1.2-2'"
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones: cerrar y más detalles en este orden -->
+    <div class="d-flex flex-row gap-2 mt-3">
+      <button class="btn btn-outline-primary border-primary shadow fw-bold w-50" (click)="closeDialog()">
+        <i class="bi bi-x me-1"></i>
+        {{ 'GROCERIES_SEARCH.CLOSE' | translate }}
+      </button>
+      <button class="btn btn-primary text-white shadow fw-bold w-50" (click)="goToMarket()">
+        <i class="bi bi-eye me-1"></i>
+        {{ 'GROCERIES_SEARCH.VIEW_MARKET' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
