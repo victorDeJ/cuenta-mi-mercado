@@ -47,8 +47,9 @@
     "EDIT_RATE": "Editar tasa"
   },
   "GROCERIES_LIST": {
-    "BREADCRUMB_NAME": "Lista de mercados",
-    "TITLE": "Lista de mercados",
+    "BREADCRUMB_NAME": "Lista de la compra",
+    "TITLE": "Lista de la compra",
+    "DETAIL_TITLE": "Registro de la compra",
     "GROCERIES_LIST_DATE": "Fecha del mercado",
     "DESCRIPTION": "Descripción",
     "ITEMS": "Productos",

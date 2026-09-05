@@ -48,7 +48,8 @@
   },
   "GROCERIES_LIST": {
     "BREADCRUMB_NAME": "Groceries List",
-    "TITLE": "Groceries List",
+    "TITLE": "Shopping List",
+    "DETAIL_TITLE": "Purchase Record",
     "GROCERIES_LIST_DATE": "Groceries list date",
     "DESCRIPTION": "Description",
     "ITEMS": "Items",

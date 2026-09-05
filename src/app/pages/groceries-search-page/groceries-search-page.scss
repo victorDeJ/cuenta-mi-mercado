@@ -10,6 +10,12 @@
 .search-list-container {
   min-height: 220px;
   max-height: calc(100vh - 240px);
+  overflow-x: auto;
+}
+
+#GroceriesSearchResults {
+  max-width: calc(100vw - 1rem);
+  box-sizing: border-box;
 }
 
 .search-input,

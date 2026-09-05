@@ -115,7 +115,7 @@ export class GroceriesListDetailPage {
 
   ngOnInit(): void {
     this.layout.cleanBreadcrumb();
-    this.layout.setHeaderTitle('GROCERIES_LIST.TITLE');
+    this.layout.setHeaderTitle('GROCERIES_LIST.DETAIL_TITLE');
     const breadcrumbItem: IBreadcrumb = {
       id: 'GroceriesListDetail',
       label: 'GROCERIES_LIST.BREADCRUMB_NAME',

@@ -1,4 +1,14 @@
-import { Component, inject, OnInit, OnDestroy, signal, computed, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  signal,
+  computed,
+  ViewChild,
+  TemplateRef,
+  ElementRef,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -53,11 +63,7 @@ function levenshteinDistance(a: string, b: string): number {
       if (b.charAt(i - 1) === a.charAt(j - 1)) {
         dp[i][j] = dp[i - 1][j - 1];
       } else {
-        dp[i][j] = Math.min(
-          dp[i - 1][j - 1] + 1,
-          dp[i][j - 1] + 1,
-          dp[i - 1][j] + 1
-        );
+        dp[i][j] = Math.min(dp[i - 1][j - 1] + 1, dp[i][j - 1] + 1, dp[i - 1][j] + 1);
       }
     }
   }
@@ -84,7 +90,7 @@ function isFuzzyTokenMatch(queryWord: string, targetWord: string): boolean {
 function matchesProduct(query: string, productDesc: string): boolean {
   const normQuery = normalizeText(query);
   const normDesc = normalizeText(productDesc);
-  if (!normQuery) return true;
+  if (!normQuery) return false;
 
   if (normDesc.includes(normQuery)) {
     return true;
@@ -92,6 +98,8 @@ function matchesProduct(query: string, productDesc: string): boolean {
 
   const queryTokens = normQuery.split(/\s+/).filter((t) => t.length > 0);
   const descTokens = normDesc.split(/[\s,.-]+/).filter((t) => t.length > 0);
+
+  if (queryTokens.length === 0) return false;
 
   return queryTokens.every((qToken) => {
     if (normDesc.includes(qToken)) return true;
@@ -124,6 +132,7 @@ export class GroceriesSearchPage implements OnInit, OnDestroy {
   dialog = inject(Dialog);
 
   @ViewChild('itemContent') itemContent!: TemplateRef<any>;
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   IVAType = IVAType;
   WeightType = WeightType;
@@ -219,7 +228,7 @@ export class GroceriesSearchPage implements OnInit, OnDestroy {
       });
 
       const lists = (data as GroceryList[]).sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
 
       const items: SearchProductItem[] = [];
@@ -256,14 +265,16 @@ export class GroceriesSearchPage implements OnInit, OnDestroy {
   onSearchInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchTerm.set(value);
-    if (!value.trim()) {
+    const trimmed = value.trim();
+    if (!trimmed) {
       this.isSearching.set(false);
       this.hasSearched.set(false);
       this.filteredProducts.set([]);
+      this.searchSubject.next('');
       return;
     }
     this.isSearching.set(true);
-    this.searchSubject.next(value);
+    this.searchSubject.next(trimmed);
   }
 
   clearSearch(): void {
@@ -271,11 +282,15 @@ export class GroceriesSearchPage implements OnInit, OnDestroy {
     this.isSearching.set(false);
     this.hasSearched.set(false);
     this.filteredProducts.set([]);
+    this.searchSubject.next('');
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
   }
 
   executeSearch(term: string): void {
-    const trimmed = term.trim();
-    if (!trimmed) {
+    const currentTerm = this.searchTerm().trim();
+    if (!currentTerm || !term.trim()) {
       this.filteredProducts.set([]);
       this.hasSearched.set(false);
       this.isSearching.set(false);
@@ -283,7 +298,7 @@ export class GroceriesSearchPage implements OnInit, OnDestroy {
     }
 
     const all = this.allProducts();
-    const results = all.filter((prod) => matchesProduct(trimmed, prod.description));
+    const results = all.filter((prod) => matchesProduct(currentTerm, prod.description));
     this.filteredProducts.set(results);
     this.hasSearched.set(true);
     this.isSearching.set(false);
